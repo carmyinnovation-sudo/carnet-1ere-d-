@@ -1,0 +1,33 @@
+{
+  "name": "Carnet de révisions · 1ère D",
+  "short_name": "Carnet 1ère D",
+  "description": "Révisions du soir, exercices corrigés, cartes mémoire et suivi de progression.",
+  "lang": "fr",
+  "dir": "ltr",
+  "display": "standalone",
+  "start_url": "./",
+  "scope": "./",
+  "id": "./",
+  "background_color": "#f6f8fc",
+  "theme_color": "#5b3fd0",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
