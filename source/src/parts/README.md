@@ -1,0 +1,15 @@
+# Carnet de révisions · 1ère D
+
+Web app de révision pour une élève de Première D (programme du Bénin), à installer sur un ordinateur (Chrome ou Edge) ou un téléphone.
+
+- **Ce soir** : la séance du soir en blocs de 25 minutes (le premier pour les maths), le compte à rebours jusqu'au prochain devoir et l'état de préparation par matière.
+- **Réviser** : exercices corrigés pas à pas au format des devoirs béninois (contexte, tâche, problèmes), fiches de cours, cartes mémoire avec répétition espacée, quiz, rédactions avec corrigé, « explique-le », minuteur et carnet d'erreurs.
+- **Progrès** : temps de travail, exercices, notes, erreurs par type et journal des séances.
+
+## Comment ça marche
+
+- La page est un fichier HTML autonome, hébergé par GitHub Pages, qui fonctionne aussi hors ligne.
+- Les données sont stockées dans Supabase. Elles ne sont lisibles qu'avec la clé secrète contenue dans le lien personnel du carnet (`?k=…`), qui n'est pas dans ce dépôt.
+- La clé Supabase présente dans le code est la clé publique du projet : elle ne donne accès à rien sans cette clé secrète.
+
+Programme : chapitres relevés dans les cahiers de l'élève (2e devoir du 1er trimestre, lundi 30 novembre 2026). Pour la PCT, chapitres du début du programme officiel de 1ère D, à vérifier.

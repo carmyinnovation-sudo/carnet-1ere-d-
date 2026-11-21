@@ -1,0 +1,58 @@
+
+/* ---------- Carnet 1ère D : couleurs des matières ---------- */
+.puce.devoir { background: var(--bic); color: var(--sur-bic); border-color: transparent; }
+.puce.verif { background: var(--orange-doux); color: var(--encre); border: 1px dashed var(--orange); }
+.puce.pasvu { background: transparent; color: var(--encre-3); border-style: dashed; }
+
+/* ---------- Écriture mathématique (construite en DOM, jamais en HTML brut) ---------- */
+.rich { white-space: pre-line; }
+.vec { position: relative; display: inline-block; padding-top: .34em; line-height: 1.1; }
+.vec::before { content: ""; position: absolute; left: .04em; right: .12em; top: .17em; border-top: .085em solid currentColor; }
+.vec::after { content: ""; position: absolute; right: .05em; top: .065em; width: .22em; height: .22em; border-top: .085em solid currentColor; border-right: .085em solid currentColor; transform: rotate(45deg); }
+.barre-sup { display: inline-block; border-top: .085em solid currentColor; line-height: 1.1; padding-top: .06em; }
+.frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; font-size: .9em; margin: 0 .12em; line-height: 1.15; }
+.frac > span { padding: 0 .18em; }
+.frac > span:first-child { border-bottom: .085em solid currentColor; }
+.rac { white-space: nowrap; }
+.rac > span { border-top: .085em solid currentColor; padding: .04em .08em 0; margin-left: .03em; }
+.cnp { display: inline-flex; align-items: center; white-space: nowrap; }
+.cnp .ix { display: inline-flex; flex-direction: column; font-size: .62em; line-height: 1.05; margin-left: .06em; text-align: left; }
+sup, sub { line-height: 0; }
+
+.fig { display: block; max-width: 280px; margin: 10px auto 4px; color: var(--encre); white-space: normal; }
+.fig svg { display: block; width: 100%; height: auto; overflow: visible; }
+.fig text { font-family: var(--f-body); font-size: 15px; font-weight: 700; fill: currentColor; }
+.fig-leg { display: block; text-align: center; font-size: var(--t-xs); color: var(--encre-2); margin-top: 2px; }
+
+/* ---------- Fiche du chapitre ---------- */
+ol.fiche { margin: 0; padding-left: 22px; display: flex; flex-direction: column; gap: 10px; line-height: 1.55; }
+ol.fiche li { white-space: pre-line; padding-left: 4px; }
+ol.fiche li::marker { color: var(--bic); font-weight: 700; }
+
+/* ---------- Exercice corrigé ---------- */
+.enonce { background: var(--feuille); border: 1px solid var(--ligne-forte); border-left: 4px solid var(--marge); border-radius: 12px; padding: 14px 16px; white-space: pre-line; line-height: 1.55; }
+.question-exo { font-size: var(--t-l); font-weight: 700; line-height: 1.4; white-space: pre-line; }
+.corrige { background: var(--vert-doux); border: 1px solid color-mix(in srgb, var(--vert) 35%, transparent); border-radius: 12px; padding: 12px 14px; white-space: pre-line; line-height: 1.6; }
+.indice { background: var(--orange-doux); border-radius: 12px; padding: 10px 14px; white-space: pre-line; line-height: 1.5; }
+.flash .q, .flash .r, .qcm button, .retour-q, .erreur-item p, .sujet p { white-space: pre-line; }
+
+/* ---------- Texte support (poème, extrait) avec numéros de ligne ---------- */
+ol.support { list-style: none; margin: 0; padding: 14px 16px 14px 48px; counter-reset: v; background: var(--feuille); border: 1px solid var(--ligne-forte); border-radius: 12px; font-family: Georgia, "Times New Roman", serif; font-size: 1.05rem; line-height: 1.6; }
+ol.support li { counter-increment: v; position: relative; min-height: 1.2em; }
+ol.support li::before { content: counter(v); position: absolute; left: -38px; width: 28px; text-align: right; font-family: var(--f-body); font-size: var(--t-xs); color: var(--encre-3); top: .2em; }
+ol.support li.vide { counter-increment: none; min-height: 0; height: .7em; font-size: 0; line-height: 0; }
+ol.support li.vide::before { content: ""; }
+.source-texte { font-size: var(--t-xs); color: var(--encre-2); margin-top: 6px; }
+
+/* ---------- Prête pour le devoir ? ---------- */
+.pret { display: flex; flex-direction: column; }
+.pret button { display: grid; grid-template-columns: minmax(92px, 130px) 1fr auto; gap: 10px; align-items: center; padding: 9px 2px; border: 0; border-top: 1px solid var(--ligne); background: none; cursor: pointer; text-align: left; font-size: var(--t-s); color: var(--encre); width: 100%; }
+.pret button:first-child { border-top: 0; }
+.pret button:hover { background: var(--bic-doux); }
+.pret .nom { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; }
+.pret .nom .pt { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+.pret .barre { height: 8px; border-radius: 4px; background: var(--ligne); overflow: hidden; }
+.pret .barre i { display: block; height: 100%; background: var(--barre); border-radius: 4px; }
+.pret .val { font-size: var(--t-xs); color: var(--encre-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.dates-devoirs { display: grid; grid-template-columns: 1fr; gap: 10px; }
+@media (min-width: 560px) { .dates-devoirs { grid-template-columns: 1fr 1fr; } }
