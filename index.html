@@ -511,6 +511,26 @@ ol.support li.vide::before { content: ""; }
 .pret .val { font-size: var(--t-xs); color: var(--encre-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .dates-devoirs { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 560px) { .dates-devoirs { grid-template-columns: 1fr 1fr; } }
+/* Sommeil : fin du travail, soir après soir */
+ul.nuits { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ul.nuits li { display: grid; grid-template-columns: minmax(78px, 1.1fr) 64px 1.3fr minmax(0, 1fr); gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--ligne); font-size: var(--t-s); }
+ul.nuits li:first-child { border-top: 0; }
+ul.nuits .jd { color: var(--encre-2); font-size: var(--t-xs); }
+ul.nuits .h { font-weight: 700; font-variant-numeric: tabular-nums; }
+ul.nuits .etat { display: inline-flex; align-items: center; gap: 5px; }
+ul.nuits .forme { color: var(--encre-2); font-size: var(--t-xs); text-align: right; }
+ul.nuits li.sans { color: var(--encre-3); }
+ul.nuits li.sans .h { font-weight: 400; }
+ul.nuits li.sans .etat { grid-column: 3 / 5; }
+ul.nuits .etat svg { width: 16px; height: 16px; flex: none; }
+.i-ok { color: var(--vert); }
+.i-tard { color: var(--rouge); }
+.carte.dormir h2 { display: inline-flex; align-items: center; gap: 8px; }
+.carte.dormir h2 > span { color: var(--bic); }
+.carte.dormir h2 svg { width: 22px; height: 22px; }
+p.petit > span > svg, p.sous > span > svg { width: 1.15em; height: 1.15em; vertical-align: -0.2em; }
+/* Un élément masqué reste masqué, même si sa classe lui donne un display */
+[hidden] { display: none !important; }
 
 </style>
 </head>
@@ -523,7 +543,8 @@ ol.support li.vide::before { content: ""; }
    CONTENU — Première D, programme du Bénin (2026-2027)
    Chapitres relevés dans les cahiers de l’élève pour le
    2e devoir du 1er trimestre (lundi 30 novembre 2026).
-   PCT : début du programme officiel de 1ère D, à vérifier.
+   PCT : en attente de la photo du cahier (30-pct.js n’est pas inclus
+   dans la construction tant que le vrai programme n’est pas relevé).
    ============================================================ */
 const NIVEAU_IA = "en classe de Première D au Bénin (programme officiel béninois, approche par compétences)";
 const MATIERES = {
@@ -626,7 +647,9 @@ const EXOS = {};
 /* ---------------- MATHÉMATIQUES · 1ère D ----------------
    SA1 Configuration de l’espace · SA2 Organisation des données
    (relevé du cahier : droites orthogonales, droite et plans orthogonaux, plans perpendiculaires,
-   projections orthogonales, vecteurs de l’espace ; équations et inéquations dans ℝ, systèmes linéaires, dénombrement) */
+   projections orthogonales, vecteurs de l’espace ; équations et inéquations dans ℝ, systèmes linéaires, dénombrement)
+   + « Les bases du calcul » (demandé par Will : maths très faibles) : signes, fractions, racines,
+   développer, factoriser, équations du 1er degré. Rangé en premier : c’est le premier bloc de maths proposé. */
 const FIGURES = {
   cube: {
     titre: "Cube ABCDEFGH", w: 270, h: 222, legende: "ABCD : face du dessous · EFGH : face du dessus",
@@ -656,6 +679,17 @@ METHODES.push(
       ["Gère le temps", "3 heures pour 3 problèmes : environ 1 heure chacun. Bloquée plus de 10 minutes ? Passe et reviens."]
     ],
     pieges: ["Rester bloquée sur une question et ne pas traiter la suite", "Oublier les cas particuliers (a = 0 dans une équation à paramètre)", "Confondre arrangement (l’ordre compte) et combinaison (l’ordre ne compte pas)", "Oublier de conclure par une phrase"] },
+  { id: "m-ma-calcul", mat: "maths", titre: "Maths : les réflexes de calcul",
+    intro: "Au devoir, beaucoup de points se perdent sur des **erreurs de calcul**, pas de cours : un signe, une fraction, un carré. Six réflexes suffisent à en éviter la plupart.",
+    etapes: [
+      ["Des parenthèses autour des négatifs", "Quand tu remplaces b par −3, écris (−3) : b^{2} = (−3)^{2} = 9. Et −4ac avec a = 2, c = −2 : −4 × 2 × (−2) = +16."],
+      ["Une étape par ligne", "N’enchaîne pas trois calculs de tête : écris chaque étape. Une erreur se voit tout de suite, et le correcteur donne des points à la méthode."],
+      ["Le moins devant une parenthèse", "Il change tous les signes : −(x − 3) = −x + 3 et −2(x − 4) = −2x + 8."],
+      ["Simplifie avant de calculer", "Avant de multiplier de grands nombres, simplifie la fraction : @frac{5 × 4 × 3}{3 × 2 × 1} = 5 × 2 = 10."],
+      ["Vérifie en remplaçant", "Une solution d’équation se vérifie en 30 secondes : remplace x dans l’équation de départ. Une factorisation se vérifie en redéveloppant."],
+      ["Le bon sens", "Un prix ou une longueur négatifs, un nombre de façons à virgule : il y a une erreur, cherche-la."]
+    ],
+    pieges: ["−3^{2} = −9 mais (−3)^{2} = 9", "(a + b)^{2} n’est pas a^{2} + b^{2} : il manque le double produit 2ab", "@sqrt{a + b} n’est pas @sqrt{a} + @sqrt{b}", "Additionner les dénominateurs : @frac{1}{2} + @frac{1}{3} n’est pas @frac{2}{5}, c’est @frac{5}{6}"] },
   { id: "m-ma-espace", mat: "maths", titre: "Maths : démontrer une orthogonalité dans l’espace",
     intro: "Presque toutes les questions de géométrie dans l’espace se ramènent à **trois théorèmes**. Le travail : trouver les bonnes droites, puis justifier chaque petite orthogonalité.",
     etapes: [
@@ -679,6 +713,41 @@ METHODES.push(
 );
 
 CHAPITRES.push(
+  /* ---------------- Les bases (avant les chapitres du devoir) ---------------- */
+  { id: "ma-bases", mat: "maths", groupe: "Les bases · utiles dans tous les chapitres", devoir: false, socle: true, court: "Les bases du calcul",
+    titre: "Les bases : signes, fractions, puissances et racines, développer, factoriser, équations du 1er degré",
+    fiche: [
+      "**Pourquoi ce chapitre ?** Au devoir, beaucoup de points se perdent sur des erreurs de calcul, pas de cours : un signe, une fraction, un carré. Ces règles servent partout : discriminant, systèmes, dénombrement, vecteurs.",
+      "**Les signes** : deux signes pareils donnent +, deux signes différents donnent −. (−2) × (−5) = 10 ; (−2) × 5 = −10. Un moins devant une parenthèse change tous les signes : −(x − 3) = −x + 3.",
+      "**Le carré d’un nombre négatif est positif** : (−3)^{2} = 9. Mais −3^{2} = −9, car le carré ne porte que sur le 3. Dans Δ = b^{2} − 4ac avec b = −3, écris b^{2} = (−3)^{2} = 9, toujours avec des parenthèses.",
+      "**Les priorités** : d’abord les parenthèses, puis les puissances, puis × et ÷, enfin + et −. 2 + 3 × 4 = 2 + 12 = 14 (et pas 20).",
+      "**Fractions** : pour additionner, mets d’abord au même dénominateur : @frac{2}{3} + @frac{1}{4} = @frac{8}{12} + @frac{3}{12} = @frac{11}{12}. Pour multiplier : haut × haut et bas × bas. Diviser par @frac{c}{d}, c’est multiplier par @frac{d}{c}. Pour simplifier, divise le haut et le bas par le même nombre : @frac{12}{18} = @frac{2}{3}.",
+      "**Puissances** : a^{n} × a^{p} = a^{n + p} ; (a^{n})^{p} = a^{n × p} ; a^{0} = 1. Une puissance impaire d’un négatif est négative : (−2)^{3} = −8.",
+      "**Racines carrées** (a et b positifs) : @sqrt{a} × @sqrt{b} = @sqrt{ab} et (@sqrt{a})^{2} = a. Pour simplifier, cherche un carré dedans : @sqrt{48} = @sqrt{16 × 3} = 4@sqrt{3}. Attention : @sqrt{a + b} n’est pas @sqrt{a} + @sqrt{b} (@sqrt{9 + 16} = 5, pas 7).",
+      "**Développer** : k(a + b) = ka + kb ; (a + b)(c + d) = ac + ad + bc + bd. Chaque terme de la 1re parenthèse multiplie chaque terme de la 2e.",
+      "**Les trois identités remarquables** : (a + b)^{2} = a^{2} + 2ab + b^{2} ; (a − b)^{2} = a^{2} − 2ab + b^{2} ; (a + b)(a − b) = a^{2} − b^{2}.",
+      "**Factoriser**, c’est l’inverse de développer. 1) Cherche un facteur commun : 3x^{2} − 6x = 3x(x − 2). 2) Sinon, reconnais une identité : x^{2} − 9 = (x − 3)(x + 3) ; x^{2} + 6x + 9 = (x + 3)^{2}. Vérifie toujours en redéveloppant.",
+      "**Équation du 1er degré** : on isole x. Ce qui est ajouté passe de l’autre côté en retranchant, ce qui multiplie passe en divisant : 3x − 7 = 2 ⇔ 3x = 9 ⇔ x = 3. Si a ≠ 0, ax + b = 0 ⇔ x = @frac{−b}{a}. Vérifie en remplaçant : 3 × 3 − 7 = 2 ✔.",
+      "**Équation produit nul** : A × B = 0 ⇔ A = 0 ou B = 0. (x − 2)(2x + 1) = 0 ⇔ x = 2 ou x = −@frac{1}{2}. C’est pour ça qu’on factorise avant de résoudre."
+    ],
+    cartes: [
+      ["(−3)^{2} et −3^{2} : combien ?", "(−3)^{2} = 9 : le carré d’un négatif est positif. −3^{2} = −9 : le carré ne porte que sur le 3."],
+      ["Règle des signes pour un produit", "Signes pareils → résultat positif. Signes différents → résultat négatif. (−2) × (−5) = 10."],
+      ["Que devient −(2x − 5) ?", "−2x + 5 : un moins devant une parenthèse change tous les signes."],
+      ["Additionner @frac{2}{3} + @frac{1}{4}", "Même dénominateur d’abord : @frac{8}{12} + @frac{3}{12} = @frac{11}{12}."],
+      ["Diviser par une fraction", "C’est multiplier par son inverse : @frac{a}{b} ÷ @frac{c}{d} = @frac{a}{b} × @frac{d}{c}."],
+      ["Simplifier @sqrt{50}", "@sqrt{25 × 2} = 5@sqrt{2}."],
+      ["@sqrt{a + b} = @sqrt{a} + @sqrt{b} ?", "Non ! @sqrt{9 + 16} = @sqrt{25} = 5, alors que @sqrt{9} + @sqrt{16} = 7."],
+      ["(a + b)^{2} = …", "a^{2} + 2ab + b^{2} (n’oublie pas le double produit 2ab)."],
+      ["(a − b)^{2} = …", "a^{2} − 2ab + b^{2}."],
+      ["(a + b)(a − b) = …", "a^{2} − b^{2}."],
+      ["Factoriser x^{2} − 25", "(x − 5)(x + 5), car a^{2} − b^{2} = (a − b)(a + b)."],
+      ["Factoriser 4x^{2} − 8x", "4x(x − 2) : 4x est le facteur commun. Vérifie : 4x × x − 4x × 2 = 4x^{2} − 8x."],
+      ["Résoudre ax + b = 0 (avec a ≠ 0)", "x = @frac{−b}{a}. Exemple : 2x + 6 = 0 ⇔ x = −3."],
+      ["Équation produit nul", "A × B = 0 ⇔ A = 0 ou B = 0."],
+      ["Comment vérifier une solution d’équation ?", "Remplace x par la valeur trouvée dans l’équation de départ : les deux côtés doivent être égaux."]
+    ],
+    sujets: [] },
   /* ---------------- SA1 · Configuration de l’espace ---------------- */
   { id: "ma-ortho", mat: "maths", groupe: "SA1 · Configuration de l’espace", devoir: true, court: "Orthogonalité dans l’espace",
     titre: "Droites orthogonales, droite et plan orthogonaux, plans perpendiculaires",
@@ -842,6 +911,25 @@ CHAPITRES.push(
 );
 
 Object.assign(QUIZ, {
+  "ma-bases": [
+    { t: "v", q: "Calcule (−4)^{2} − 4 × 1 × (−5).", r: 36, p: [-4, 4, -36], e: "(−4)^{2} = 16 et −4 × 1 × (−5) = +20, donc 16 + 20 = 36. C’est le Δ de x^{2} − 4x − 5." },
+    { t: "v", q: "Combien vaut −3^{2} ?", r: -9, p: [9, -6, 6], e: "Le carré ne porte que sur le 3 : −(3 × 3) = −9. Avec des parenthèses, (−3)^{2} = 9." },
+    { t: "v", q: "Combien vaut 2 + 3 × 4 ?", r: 14, p: [20, 24, 9], e: "La multiplication passe avant l’addition : 2 + 12 = 14." },
+    { t: "v", q: "Pour 2x^{2} − 3x − 2, calcule Δ = b^{2} − 4ac.", r: 25, p: [-7, 7, 1], e: "a = 2, b = −3, c = −2 : Δ = (−3)^{2} − 4 × 2 × (−2) = 9 + 16 = 25. Piège : −4 × 2 × (−2) = +16." },
+    { t: "c", q: "@frac{2}{3} + @frac{1}{4} = …", r: "@frac{11}{12}", p: ["@frac{3}{7}", "@frac{3}{12}", "@frac{2}{12}"], e: "Même dénominateur d’abord : @frac{8}{12} + @frac{3}{12} = @frac{11}{12}. On n’additionne jamais les dénominateurs." },
+    { t: "c", q: "@frac{3}{4} × @frac{8}{9} = …", r: "@frac{2}{3}", p: ["@frac{11}{13}", "@frac{27}{32}", "@frac{24}{9}"], e: "Haut × haut et bas × bas : @frac{24}{36}, puis on simplifie par 12 : @frac{2}{3}." },
+    { t: "c", q: "@frac{5}{6} ÷ @frac{10}{3} = …", r: "@frac{1}{4}", p: ["@frac{25}{9}", "4", "@frac{1}{2}"], e: "Diviser, c’est multiplier par l’inverse : @frac{5}{6} × @frac{3}{10} = @frac{15}{60} = @frac{1}{4}." },
+    { t: "c", q: "@sqrt{48} = …", r: "4@sqrt{3}", p: ["16@sqrt{3}", "3@sqrt{4}", "24"], e: "48 = 16 × 3, donc @sqrt{48} = @sqrt{16} × @sqrt{3} = 4@sqrt{3}." },
+    { t: "c", q: "@sqrt{9 + 16} = …", r: "5", p: ["7", "25", "12,5"], e: "@sqrt{25} = 5. Piège : @sqrt{9} + @sqrt{16} = 7, ce n’est pas la même chose." },
+    { t: "c", q: "Développe (x + 3)^{2}.", r: "x^{2} + 6x + 9", p: ["x^{2} + 9", "x^{2} + 3x + 9", "x^{2} + 6x + 6"], e: "(a + b)^{2} = a^{2} + 2ab + b^{2} : le double produit vaut 2 × x × 3 = 6x." },
+    { t: "c", q: "Développe (2x − 1)(x + 4).", r: "2x^{2} + 7x − 4", p: ["2x^{2} − 4", "2x^{2} + 9x − 4", "2x^{2} + 7x + 4"], e: "2x × x + 2x × 4 − 1 × x − 1 × 4 = 2x^{2} + 8x − x − 4 = 2x^{2} + 7x − 4." },
+    { t: "c", q: "Factorise x^{2} − 16.", r: "(x − 4)(x + 4)", p: ["(x − 4)^{2}", "(x − 8)(x + 8)", "x(x − 16)"], e: "x^{2} − 16 = x^{2} − 4^{2} = (x − 4)(x + 4), avec a^{2} − b^{2} = (a − b)(a + b)." },
+    { t: "c", q: "Factorise 6x^{2} + 9x.", r: "3x(2x + 3)", p: ["3x(2x + 9)", "6x(x + 9)", "3(2x^{2} + 3)"], e: "Le facteur commun est 3x : 6x^{2} = 3x × 2x et 9x = 3x × 3. Vérifie en redéveloppant." },
+    { t: "v", q: "Résous 3(x − 2) = x + 4. x = ?", r: 5, p: [3, 10, -5], e: "3x − 6 = x + 4 ⇔ 2x = 10 ⇔ x = 5. Piège : 3(x − 2) = 3x − 6, pas 3x − 2." },
+    { t: "v", q: "Résous 5x − 7 = 8. x = ?", r: 3, p: [-3, 15, 0.2], e: "5x = 8 + 7 = 15, donc x = @frac{15}{5} = 3. Vérification : 5 × 3 − 7 = 8 ✔." },
+    { t: "c", q: "Les solutions de (x − 2)(3x + 1) = 0 sont…", r: "x = 2 ou x = −@frac{1}{3}", p: ["x = −2 ou x = @frac{1}{3}", "x = 2 ou x = −3", "x = 2 seulement"], e: "Produit nul : x − 2 = 0 ou 3x + 1 = 0, donc x = 2 ou x = −@frac{1}{3}." },
+    { t: "v", q: "Combien vaut @frac{5 × 4 × 3}{3 × 2 × 1} ?", r: 10, p: [20, 60, 30], e: "Simplifie avant de calculer : les 3 s’en vont, puis @frac{5 × 4}{2} = 10. C’est @C{5}{3}, qui sert en dénombrement." }
+  ],
   "ma-ortho": [
     { t: "c", q: "Deux droites orthogonales de l’espace…", r: "ne se coupent pas forcément", p: ["se coupent toujours", "sont toujours parallèles", "sont forcément dans un même plan"], e: "Orthogonales = à angle droit, même sans se toucher. Si elles se coupent en plus, elles sont perpendiculaires." },
     { t: "c", q: "Pour prouver que (d) est orthogonale au plan (P), il suffit que (d) soit orthogonale à…", r: "deux droites sécantes de (P)", p: ["une droite de (P)", "deux droites parallèles de (P)", "trois points de (P)"], e: "Le théorème demande deux droites **sécantes**. Deux droites parallèles ne suffisent pas." },
@@ -930,6 +1018,67 @@ Object.assign(QUIZ, {
 });
 
 Object.assign(EXOS, {
+  "ma-bases": [
+    { id: "ma-b1", titre: "Calculer sans calculatrice", niveau: 1, duree: 15,
+      contexte: "Calcule chaque expression et donne le résultat le plus simple possible, sans calculatrice :\nA = (−2)^{3} + 3 × (−4)\nB = @frac{2}{3} − @frac{5}{6}\nC = @frac{3}{5} ÷ @frac{9}{10}\nD = @sqrt{75} − @sqrt{12}",
+      questions: [
+        { q: "1. Calcule A.", indice: "(−2)^{3} = (−2) × (−2) × (−2). Fais d’abord la puissance et le produit, puis l’addition.",
+          corrige: "(−2)^{3} = −8 (puissance impaire d’un négatif : résultat négatif) et 3 × (−4) = −12.\nA = −8 + (−12) = **−20**.", type: "calcul" },
+        { q: "2. Calcule B.", indice: "Mets les deux fractions sur 6.",
+          corrige: "@frac{2}{3} = @frac{4}{6}, donc B = @frac{4}{6} − @frac{5}{6} = **−@frac{1}{6}**.", type: "calcul" },
+        { q: "3. Calcule C et simplifie.", indice: "Diviser par @frac{9}{10}, c’est multiplier par @frac{10}{9}.",
+          corrige: "C = @frac{3}{5} × @frac{10}{9} = @frac{30}{45} = **@frac{2}{3}** (on divise le haut et le bas par 15).", type: "calcul" },
+        { q: "4. Écris D sous la forme a@sqrt{3}.", indice: "75 = 25 × 3 et 12 = 4 × 3.",
+          corrige: "@sqrt{75} = @sqrt{25 × 3} = 5@sqrt{3} et @sqrt{12} = @sqrt{4 × 3} = 2@sqrt{3}.\nD = 5@sqrt{3} − 2@sqrt{3} = **3@sqrt{3}**.",
+          retenir: "Pour simplifier une racine, cherche le plus grand carré qui divise le nombre : 4, 9, 16, 25, 36, 49…" }
+      ] },
+    { id: "ma-b2", titre: "Développer et réduire", niveau: 1, duree: 15,
+      contexte: "Développe et réduis chaque expression :\nE = (x + 5)^{2}\nF = (3x − 2)^{2}\nG = (2x + 7)(2x − 7)\nH = (x − 1)(2x + 3) − 2(x^{2} − 4)",
+      questions: [
+        { q: "1. Développe E et F avec les identités remarquables.", indice: "(a + b)^{2} = a^{2} + 2ab + b^{2} et (a − b)^{2} = a^{2} − 2ab + b^{2} : n’oublie pas le double produit.",
+          corrige: "E = x^{2} + 2 × x × 5 + 5^{2} = **x^{2} + 10x + 25**.\nF = (3x)^{2} − 2 × 3x × 2 + 2^{2} = **9x^{2} − 12x + 4**.", type: "calcul",
+          retenir: "(3x)^{2} = 9x^{2} : le carré porte sur le 3 et sur le x." },
+        { q: "2. Développe G.", indice: "C’est (a + b)(a − b) avec a = 2x et b = 7.",
+          corrige: "G = (2x)^{2} − 7^{2} = **4x^{2} − 49**." },
+        { q: "3. Développe et réduis H.", indice: "Développe chaque morceau à part. Attention au signe moins devant 2(x^{2} − 4).",
+          corrige: "(x − 1)(2x + 3) = 2x^{2} + 3x − 2x − 3 = 2x^{2} + x − 3.\n−2(x^{2} − 4) = −2x^{2} + 8.\nH = 2x^{2} + x − 3 − 2x^{2} + 8 = **x + 5**.", type: "calcul" }
+      ] },
+    { id: "ma-b3", titre: "Factoriser pour résoudre", niveau: 2, duree: 20,
+      contexte: "On donne les expressions :\nA(x) = x^{2} − 9\nB(x) = (2x + 1)(x − 4) + (2x + 1)(3x + 2)\nC(x) = x^{2} − 10x + 25",
+      questions: [
+        { q: "1. Factorise A(x), puis résous A(x) = 0.", indice: "x^{2} − 9 = x^{2} − 3^{2} : c’est a^{2} − b^{2}.",
+          corrige: "A(x) = (x − 3)(x + 3).\nA(x) = 0 ⇔ x − 3 = 0 ou x + 3 = 0 ⇔ **x = 3 ou x = −3**." },
+        { q: "2. Factorise B(x), puis résous B(x) = 0.", indice: "(2x + 1) est un facteur commun aux deux termes.",
+          corrige: "B(x) = (2x + 1)[(x − 4) + (3x + 2)] = (2x + 1)(4x − 2).\nB(x) = 0 ⇔ 2x + 1 = 0 ou 4x − 2 = 0 ⇔ **x = −@frac{1}{2} ou x = @frac{1}{2}**.", type: "calcul" },
+        { q: "3. Factorise C(x), puis résous C(x) = 0.", indice: "x^{2} − 10x + 25 = x^{2} − 2 × x × 5 + 5^{2}.",
+          corrige: "C(x) = (x − 5)^{2}.\nC(x) = 0 ⇔ x − 5 = 0 ⇔ **x = 5** (une seule solution).",
+          retenir: "Pour résoudre une équation du 2nd degré sans discriminant : factorise, puis utilise le produit nul." }
+      ] },
+    { id: "ma-b4", titre: "Les pagnes de la fête de fin d’année", niveau: 2, duree: 20,
+      contexte: "Pour la fête de fin d’année, la classe de 1ère D commande des pagnes. Le vendeur Koffi demande 3 500 F par pagne, plus 1 500 F de livraison. La trésorière de la classe dispose de 64 500 F.\nTâche : aider la classe à choisir sa commande.",
+      questions: [
+        { q: "1. Exprime le prix P(n) à payer chez Koffi pour n pagnes, livraison comprise.",
+          corrige: "Chaque pagne coûte 3 500 F, et la livraison 1 500 F une seule fois : **P(n) = 3 500n + 1 500**." },
+        { q: "2. Combien de pagnes la classe peut-elle acheter avec exactement 64 500 F ?", indice: "Résous l’équation 3 500n + 1 500 = 64 500.",
+          corrige: "3 500n + 1 500 = 64 500 ⇔ 3 500n = 63 000 ⇔ n = @frac{63 000}{3 500} = **18**.\nLa classe peut acheter 18 pagnes.", type: "calcul" },
+        { q: "3. Une autre vendeuse, Afiavi, vend le pagne 3 800 F, livraison gratuite. Pour combien de pagnes les deux vendeurs coûtent-ils le même prix ?", indice: "Chez Afiavi, n pagnes coûtent 3 800n. Résous 3 500n + 1 500 = 3 800n.",
+          corrige: "3 500n + 1 500 = 3 800n ⇔ 1 500 = 300n ⇔ **n = 5**.\nPour 5 pagnes, les deux coûtent 19 000 F." },
+        { q: "4. Pour 18 pagnes, quel vendeur est le moins cher, et de combien ?",
+          corrige: "Chez Koffi : P(18) = 64 500 F. Chez Afiavi : 3 800 × 18 = 68 400 F.\n**Koffi est moins cher, de 3 900 F.**",
+          retenir: "Termine toujours par une phrase qui répond à la question, avec l’unité (ici F)." }
+      ] },
+    { id: "ma-b5", titre: "Équations avec des fractions et des parenthèses", niveau: 2, duree: 15,
+      contexte: "Résous dans ℝ les équations suivantes :\n(E1)  @frac{x}{2} + @frac{x}{3} = 10\n(E2)  @frac{2x − 1}{3} = @frac{x + 2}{2}\n(E3)  5 − 2(x − 3) = 3x − 4",
+      questions: [
+        { q: "1. Résous (E1).", indice: "Multiplie les deux membres par 6 pour enlever les dénominateurs.",
+          corrige: "On multiplie par 6 : 3x + 2x = 60 ⇔ 5x = 60 ⇔ **x = 12**.\nVérification : @frac{12}{2} + @frac{12}{3} = 6 + 4 = 10 ✔.", type: "calcul" },
+        { q: "2. Résous (E2).", indice: "Produit en croix : 2(2x − 1) = 3(x + 2).",
+          corrige: "2(2x − 1) = 3(x + 2) ⇔ 4x − 2 = 3x + 6 ⇔ **x = 8**.\nVérification : @frac{16 − 1}{3} = 5 et @frac{8 + 2}{2} = 5 ✔.", type: "calcul" },
+        { q: "3. Résous (E3).", indice: "Attention au signe moins devant 2(x − 3) : −2(x − 3) = −2x + 6.",
+          corrige: "5 − 2x + 6 = 3x − 4 ⇔ 11 − 2x = 3x − 4 ⇔ 15 = 5x ⇔ **x = 3**.\nVérification : 5 − 2(3 − 3) = 5 et 3 × 3 − 4 = 5 ✔.", type: "calcul",
+          retenir: "Un moins devant une parenthèse change tous les signes à l’intérieur." }
+      ] }
+  ],
   "ma-ortho": [
     { id: "ma-o1", titre: "Les cages de l’atelier de Jacob", niveau: 2, duree: 25,
       contexte: "Jacob, soudeur à Cotonou, fabrique des cages en forme de cube ABCDEFGH pour des pigeons. Son fils veut comprendre les propriétés de ces cages.\nABCD est la face du dessous, EFGH celle du dessus (E au-dessus de A, F de B, G de C, H de D). On note O le centre du carré ABCD.\n@fig{cube}",
@@ -1429,377 +1578,6 @@ Object.assign(EXOS, {
           corrige: "25 % = @frac{1}{4} = @frac{1}{2^{2}} : **2 périodes** se sont écoulées.\nt = 2 × 5 730 = **11 460 ans**." },
         { q: "6. Pourrait-on dater avec le carbone 14 une coulée de basalte de 3 millions d’années ? Quelle méthode choisir ?",
           corrige: "**Non** : le basalte n’est pas d’origine vivante, et 3 millions d’années, c’est bien plus que 50 000 ans (il ne resterait plus de ¹⁴C mesurable).\nOn choisit le **potassium-argon** (période d’environ 1,3 milliard d’années), adapté aux roches volcaniques." }
-      ] }
-  ]
-});
-
-/* ---------------- PCT · 1ère D ----------------
-   Pas de photo du cahier de PCT : chapitres du début du programme officiel de 1ère D
-   (SA 1 « L’énergie mécanique au service du développement », SA 2 « Étude de quelques composés organiques »).
-   Tous marqués « à vérifier » : l’élève décoche ce que son professeur n’a pas encore fait. */
-METHODES.push(
-  { id: "m-pct-devoir", mat: "pct", titre: "PCT : réussir le devoir",
-    intro: "Le devoir de PCT dure souvent 3 heures et compte deux situations d’évaluation : **A. Chimie et technologie** et **B. Physique et technologie**. Chacune a un contexte, des documents (données) et une tâche en trois parties : 1. mobilisation des ressources (questions de cours), 2 et 3. résolution de problème.",
-    etapes: [
-      ["Commence par les questions de cours", "Définitions, énoncés (principe d’inertie, théorème de l’énergie cinétique), équations à équilibrer : ce sont des points rapides."],
-      ["Fais un schéma", "Le système, les forces (flèches), le sens du mouvement. Un schéma évite la moitié des erreurs de signe."],
-      ["Formule littérale d’abord", "Écris la relation avec des lettres (W = mgh), puis remplace par les valeurs."],
-      ["Les unités", "Convertis avant de calculer : km/h → m/s (÷ 3,6), g → kg, cm → m. Le résultat a toujours une unité."],
-      ["Vérifie l’ordre de grandeur", "Une vitesse de 300 m/s pour un enfant sur un toboggan ? Il y a une erreur."],
-      ["En chimie", "Équation équilibrée, puis quantités de matière (n = m/M, n = V/V_{m}), puis réponse."]
-    ],
-    pieges: ["Oublier de convertir les km/h en m/s", "Se tromper de signe pour le travail du poids (montée : négatif)", "Oublier que la réaction normale ne travaille pas", "Une équation de réaction non équilibrée"] }
-);
-
-CHAPITRES.push(
-  { id: "pct-cine", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: false, verifier: true, court: "Rappel : mouvement et principe d’inertie",
-    titre: "Rappel : mouvement d’un solide, vitesse, principe d’inertie",
-    fiche: [
-      "**Référentiel** : l’objet par rapport auquel on étudie le mouvement (le sol : référentiel terrestre).",
-      "**Vitesse moyenne** : v = @frac{d}{Δt} (m/s). Conversion : **1 m/s = 3,6 km/h** (72 km/h = 20 m/s).",
-      "**Mouvement rectiligne uniforme (MRU)** : trajectoire droite, vitesse constante. Loi horaire : x = v·t + x_{0}.",
-      "**Mouvement rectiligne uniformément varié** : accélération a constante. v = a·t + v_{0} ; x = ½a·t² + v_{0}·t + x_{0} ; v² − v_{0}² = 2a(x − x_{0}).",
-      "**Principe d’inertie** : dans un référentiel galiléen, un solide isolé ou pseudo-isolé (forces qui se compensent) est soit **au repos**, soit en **mouvement rectiligne uniforme**. Et réciproquement.",
-      "**Chute avec vitesse horizontale** (projectile) : x = v_{0}·t et y = −½g·t² donnent une trajectoire **parabolique** : y = −@frac{g}{2v_{0}²}x²."
-    ],
-    cartes: [
-      ["Principe d’inertie", "Dans un référentiel galiléen, un solide isolé ou pseudo-isolé est soit au repos, soit en mouvement rectiligne uniforme (et réciproquement)."],
-      ["Solide pseudo-isolé", "Solide soumis à des forces qui se compensent (leur somme est nulle)."],
-      ["Conversion km/h → m/s", "On divise par 3,6. Exemple : 72 km/h = 20 m/s ; 3,6 km/h = 1 m/s."],
-      ["Loi horaire du MRU", "x = v·t + x_{0} (v constante)."],
-      ["Relation indépendante du temps (MRUV)", "v² − v_{0}² = 2a(x − x_{0})."],
-      ["Trajectoire d’un objet lancé horizontalement", "Une parabole : x = v_{0}t, y = −½gt², donc y = −@frac{g}{2v_{0}²}x²."]
-    ],
-    sujets: [] },
-  { id: "pct-trav", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Travail et puissance d’une force",
-    titre: "Travail et puissance d’une force",
-    fiche: [
-      "**Travail d’une force constante** @vec{F} sur un déplacement rectiligne AB : **W_{AB}(@vec{F}) = F × AB × cos α**, où α est l’angle entre @vec{F} et le déplacement. Unité : le **joule (J)**.",
-      "**Moteur, résistant, nul** : W > 0 si 0 ≤ α < 90° (la force aide le mouvement) ; W < 0 si 90° < α ≤ 180° (elle s’y oppose) ; W = 0 si α = 90° (force perpendiculaire au déplacement).",
-      "**Travail du poids** : W_{AB}(@vec{P}) = m·g·(z_{A} − z_{B}) = ± m·g·h. Positif quand l’objet **descend**, négatif quand il **monte**. Il ne dépend **pas du chemin suivi**, seulement de la différence d’altitude.",
-      "**Travail d’une force de frottement** constante f, opposée au mouvement, sur une longueur L : W = −f × L.",
-      "**Réaction normale** d’un support (sans frottement) : perpendiculaire au déplacement, donc **son travail est nul**.",
-      "Sur un arc de cercle de rayon r (toboggan, pendule) : la différence d’altitude se calcule avec r et cos θ, par exemple h = r(1 − cos θ).",
-      "**Puissance moyenne** : P = @frac{W}{Δt}, en **watts (W)**. **Puissance instantanée** : P = F × v × cos α.",
-      "Unités : 1 kW = 1 000 W ; 1 kWh = 3,6 × 10^{6} J. On prend en général **g = 10 N/kg**.",
-      "**Rotation** autour d’un axe fixe : travail d’un couple W = C × θ (θ en radians) et puissance P = C × ω."
-    ],
-    cartes: [
-      ["Formule du travail d’une force constante", "W_{AB}(@vec{F}) = F × AB × cos α (α : angle entre la force et le déplacement). En joules."],
-      ["Travail moteur", "W > 0 : la force favorise le mouvement (angle α < 90°)."],
-      ["Travail résistant", "W < 0 : la force s’oppose au mouvement (angle α > 90°)."],
-      ["Travail du poids", "W = m·g·(z_{A} − z_{B}) : + m·g·h à la descente, − m·g·h à la montée. Indépendant du chemin suivi."],
-      ["Travail d’une force perpendiculaire au déplacement", "Nul (cos 90° = 0). Exemple : la réaction normale sans frottement."],
-      ["Travail d’une force de frottement", "W = −f × L (toujours résistant)."],
-      ["Puissance moyenne", "P = @frac{W}{Δt}, en watts (W)."],
-      ["Puissance instantanée", "P = F × v × cos α (ou P = F × v si la force est dans le sens du mouvement)."],
-      ["Le kilowattheure", "1 kWh = 1 000 W × 3 600 s = 3,6 × 10^{6} J."],
-      ["Travail d’un couple de moment C", "W = C × θ, avec θ l’angle de rotation en radians."]
-    ],
-    sujets: [] },
-  { id: "pct-ec", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Énergie cinétique et théorème",
-    titre: "Énergie cinétique et théorème de l’énergie cinétique",
-    fiche: [
-      "**Énergie cinétique** d’un solide en translation : **E_{c} = ½ m v²** (m en kg, v en m/s, E_{c} en J). Si la vitesse double, l’énergie cinétique est multipliée par 4.",
-      "En rotation autour d’un axe : E_{c} = ½ J_{Δ} ω² (J_{Δ} : moment d’inertie, ω : vitesse angulaire en rad/s).",
-      "**Théorème de l’énergie cinétique** : dans un référentiel galiléen, la variation d’énergie cinétique d’un solide entre deux positions A et B est égale à la somme des travaux des forces extérieures : **E_{c}(B) − E_{c}(A) = Σ W_{AB}(@vec{F}_{ext})**.",
-      "**Méthode** : 1) système et référentiel ; 2) bilan des forces (schéma) ; 3) travail de chaque force ; 4) on écrit le théorème ; 5) on isole l’inconnue (vitesse, hauteur, force de frottement…).",
-      "**Chute libre sans vitesse initiale** d’une hauteur h : ½mv² = mgh, donc **v = @sqrt{2gh}**.",
-      "Freinage : E_{c} diminue, la somme des travaux est négative (frottements). Distance d’arrêt sur le plat avec une force de frottement f : d = @frac{E_{c}}{f}."
-    ],
-    cartes: [
-      ["Énergie cinétique (translation)", "E_{c} = ½ m v², en joules (m en kg, v en m/s)."],
-      ["Si la vitesse double, l’énergie cinétique…", "est multipliée par 4 (elle dépend de v²)."],
-      ["Énoncé du théorème de l’énergie cinétique", "Dans un référentiel galiléen : E_{c}(B) − E_{c}(A) = somme des travaux des forces extérieures entre A et B."],
-      ["Les 5 étapes d’une application du théorème", "Système et référentiel, bilan des forces, travail de chaque force, écrire le théorème, isoler l’inconnue."],
-      ["Vitesse après une chute libre de hauteur h (départ arrêté)", "v = @sqrt{2gh}."],
-      ["Énergie cinétique de rotation", "E_{c} = ½ J_{Δ} ω²."],
-      ["Calculer une force de frottement avec le théorème", "W(f) = ΔE_{c} − (somme des autres travaux), puis f = −W(f) / L."]
-    ],
-    sujets: [] },
-  { id: "pct-em", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Énergie potentielle et énergie mécanique",
-    titre: "Énergie potentielle de pesanteur et énergie mécanique",
-    fiche: [
-      "**Énergie potentielle de pesanteur** : **E_{pp} = m g z** (+ une constante), avec z l’altitude comptée à partir d’un niveau de référence choisi (E_{pp} = 0 à ce niveau). L’axe des z est orienté vers le haut.",
-      "Lien avec le travail du poids : W_{AB}(@vec{P}) = E_{pp}(A) − E_{pp}(B).",
-      "**Énergie mécanique** : **E_{m} = E_{c} + E_{pp}**.",
-      "**Sans frottements**, l’énergie mécanique se **conserve** : E_{c} et E_{pp} s’échangent (ce que l’objet perd en hauteur, il le gagne en vitesse).",
-      "**Avec frottements**, l’énergie mécanique **diminue** : ΔE_{m} = W(frottements) < 0. L’énergie « perdue » devient de la chaleur.",
-      "Exemple de technologie : dans un barrage hydroélectrique (comme celui de Nangbéto, sur le fleuve Mono), l’énergie potentielle de l’eau devient énergie cinétique puis énergie électrique."
-    ],
-    cartes: [
-      ["Énergie potentielle de pesanteur", "E_{pp} = m g z (z : altitude par rapport au niveau de référence choisi)."],
-      ["Énergie mécanique", "E_{m} = E_{c} + E_{pp}."],
-      ["Sans frottements, l’énergie mécanique…", "se conserve : elle reste constante."],
-      ["Avec frottements, l’énergie mécanique…", "diminue : sa variation est égale au travail des frottements (négatif)."],
-      ["Lien entre travail du poids et énergie potentielle", "W_{AB}(@vec{P}) = E_{pp}(A) − E_{pp}(B) = −ΔE_{pp}."],
-      ["Hauteur maximale d’un objet lancé vers le haut (sans frottements)", "Au sommet, v = 0 : toute l’énergie mécanique est de l’énergie potentielle, donc z_{max} = @frac{E_{m}}{mg}."]
-    ],
-    sujets: [] },
-  { id: "pct-anal", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Chimie organique : généralités et analyse",
-    titre: "Généralités sur la chimie organique et analyse élémentaire",
-    fiche: [
-      "**Composé organique** : composé du carbone, contenant presque toujours de l’hydrogène (souvent aussi O et N). Exceptions minérales : CO, CO₂, les carbonates, les cyanures.",
-      "**Tétravalence** : le carbone fait toujours 4 liaisons (l’hydrogène 1, l’oxygène 2, l’azote 3).",
-      "**Mise en évidence (analyse qualitative)** : le **carbone** donne du CO₂ en brûlant (il trouble l’**eau de chaux**) ou un dépôt noir de carbone ; l’**hydrogène** donne de l’eau (buée, le **sulfate de cuivre anhydre** passe du blanc au bleu) ; l’**azote** donne de l’ammoniac avec la chaux sodée (il bleuit le papier pH humide).",
-      "**Combustion complète** : C_{x}H_{y}O_{z} + (x + @frac{y}{4} − @frac{z}{2}) O₂ → x CO₂ + @frac{y}{2} H₂O.",
-      "**Masses de C et H** à partir des produits : m(C) = @frac{12}{44} × m(CO₂) ; m(H) = @frac{2}{18} × m(H₂O) ; m(O) = m − m(C) − m(H).",
-      "**Composition centésimale** : %C = @frac{m(C)}{m} × 100, etc. Formule brute : **@frac{12x}{%C} = @frac{y}{%H} = @frac{16z}{%O} = @frac{M}{100}**.",
-      "**Masse molaire d’un gaz** à partir de sa densité par rapport à l’air : **M = 29 × d** (g/mol).",
-      "Volume molaire (conditions normales) : V_{m} = 22,4 L/mol. Quantité de matière : n = @frac{m}{M} = @frac{V}{V_{m}}.",
-      "**Isomères** : même formule brute, formules développées différentes. Formule développée (toutes les liaisons), semi-développée (liaisons C–C seulement), brute (C_{x}H_{y}…)."
-    ],
-    cartes: [
-      ["Composé organique", "Composé du carbone (avec presque toujours de l’hydrogène). Exceptions : CO, CO₂, carbonates, cyanures."],
-      ["Tétravalence du carbone", "Le carbone forme toujours 4 liaisons."],
-      ["Mettre en évidence le carbone", "Le produit de combustion (CO₂) trouble l’eau de chaux."],
-      ["Mettre en évidence l’hydrogène", "Il se forme de l’eau : le sulfate de cuivre anhydre passe du blanc au bleu."],
-      ["Mettre en évidence l’azote", "Chauffé avec de la chaux sodée, le composé libère de l’ammoniac qui bleuit le papier pH humide."],
-      ["Masse de carbone dans m(CO₂)", "m(C) = @frac{12}{44} × m(CO₂)."],
-      ["Masse d’hydrogène dans m(H₂O)", "m(H) = @frac{2}{18} × m(H₂O)."],
-      ["Formule brute à partir des pourcentages", "@frac{12x}{%C} = @frac{y}{%H} = @frac{16z}{%O} = @frac{M}{100}."],
-      ["Masse molaire d’un gaz connaissant sa densité d", "M = 29 × d (en g/mol)."],
-      ["Combustion complète de C_{x}H_{y}O_{z}", "C_{x}H_{y}O_{z} + (x + y/4 − z/2) O₂ → x CO₂ + y/2 H₂O."],
-      ["Isomères", "Composés de même formule brute mais de formules développées différentes."]
-    ],
-    sujets: [] },
-  { id: "pct-alcanes", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Les alcanes",
-    titre: "Les alcanes : formule, nomenclature, isomérie, réactions",
-    fiche: [
-      "**Alcanes** : hydrocarbures **saturés** (uniquement des liaisons simples), de formule générale **C_{n}H_{2n+2}**. Masse molaire : M = 14n + 2 (g/mol).",
-      "**Noms** : méthane CH₄, éthane C₂H₆, propane C₃H₈, butane C₄H₁₀, pentane C₅H₁₂, hexane C₆H₁₄, heptane C₇H₁₆, octane C₈H₁₈.",
-      "**Groupes alkyles** : méthyl –CH₃, éthyl –C₂H₅, propyl –C₃H₇.",
-      "**Nommer un alcane ramifié** : 1) trouver la chaîne carbonée la plus longue (nom de base) ; 2) numéroter pour donner les **plus petits numéros** aux ramifications ; 3) nommer les ramifications par ordre alphabétique avec leur numéro (di-, tri- s’il y en a plusieurs identiques). Exemple : CH₃–CH(CH₃)–CH₂–CH₃ est le **2-méthylbutane**.",
-      "**Isomères** : C₄H₁₀ en a 2 (butane, méthylpropane) ; C₅H₁₂ en a 3 (pentane, 2-méthylbutane, 2,2-diméthylpropane).",
-      "**Combustion complète** : C_{n}H_{2n+2} + @frac{3n + 1}{2} O₂ → n CO₂ + (n + 1) H₂O. Exemple : C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O. Combustion incomplète (manque d’air) : monoxyde de carbone CO (gaz mortel) et suie (carbone).",
-      "**Substitution** (en présence de lumière) : un atome H est remplacé par un atome de chlore. CH₄ + Cl₂ → CH₃Cl + HCl, puis CH₂Cl₂, CHCl₃ (chloroforme), CCl₄.",
-      "**Sources et usages** : pétrole et gaz naturel ; gaz de cuisine (butane, propane), essence, gasoil, pétrole lampant."
-    ],
-    cartes: [
-      ["Formule générale des alcanes", "C_{n}H_{2n+2} (hydrocarbures saturés : liaisons simples seulement)."],
-      ["Masse molaire d’un alcane en fonction de n", "M = 12n + (2n + 2) = 14n + 2 g/mol."],
-      ["Les 6 premiers alcanes", "Méthane CH₄, éthane C₂H₆, propane C₃H₈, butane C₄H₁₀, pentane C₅H₁₂, hexane C₆H₁₄."],
-      ["Nommer un alcane ramifié : les 3 étapes", "Chaîne la plus longue ; numéroter pour avoir les plus petits numéros ; ramifications par ordre alphabétique avec leur numéro."],
-      ["Nom de CH₃–CH(CH₃)–CH₂–CH₃", "2-méthylbutane (chaîne de 4 carbones, un méthyl sur le carbone 2)."],
-      ["Les isomères de C₄H₁₀", "Le butane et le méthylpropane (2-méthylpropane)."],
-      ["Les isomères de C₅H₁₂", "Pentane, 2-méthylbutane, 2,2-diméthylpropane."],
-      ["Combustion complète du propane", "C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O."],
-      ["Combustion incomplète : le danger", "Elle produit du monoxyde de carbone (CO), un gaz incolore et mortel, et de la suie."],
-      ["Réaction de substitution", "Un atome d’hydrogène est remplacé par un autre atome : CH₄ + Cl₂ → CH₃Cl + HCl (à la lumière)."]
-    ],
-    sujets: [] },
-  { id: "pct-alcenes", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Alcènes et alcynes",
-    titre: "Les alcènes et les alcynes : nomenclature, addition, polymérisation",
-    fiche: [
-      "**Alcènes** : une double liaison C=C, formule **C_{n}H_{2n}**. Le plus simple : l’éthylène (éthène) C₂H₄, molécule plane.",
-      "**Alcynes** : une triple liaison C≡C, formule **C_{n}H_{2n−2}**. Le plus simple : l’acétylène (éthyne) C₂H₂, molécule linéaire.",
-      "**Nomenclature** : suffixe **-ène** ou **-yne**, avec le numéro (le plus petit possible) du premier carbone de la liaison multiple : but-1-ène CH₂=CH–CH₂–CH₃, but-2-ène CH₃–CH=CH–CH₃.",
-      "**Isomérie Z/E** : quand chaque carbone de la double liaison porte deux groupes différents (but-2-ène), il existe deux isomères : Z (groupes du même côté) et E (de part et d’autre).",
-      "**Réactions d’addition** (la liaison multiple s’ouvre) : hydrogénation (H₂, catalyseur nickel) → alcane ; dibrome Br₂ → dérivé dibromé ; eau (catalyseur acide) → alcool ; chlorure d’hydrogène HCl → chloroalcane.",
-      "**Test des liaisons multiples** : un alcène ou un alcyne **décolore l’eau de brome** (jaune-orangé), un alcane non.",
-      "**Polymérisation** : n CH₂=CH₂ → –(CH₂–CH₂)ₙ– : le polyéthylène (sachets, bidons). Avec le chlorure de vinyle : le PVC (tuyaux).",
-      "Préparation de l’acétylène : CaC₂ + 2 H₂O → C₂H₂ + Ca(OH)₂ (carbure de calcium et eau)."
-    ],
-    cartes: [
-      ["Formule générale des alcènes", "C_{n}H_{2n} (une double liaison C=C)."],
-      ["Formule générale des alcynes", "C_{n}H_{2n−2} (une triple liaison C≡C)."],
-      ["Éthylène et acétylène", "Éthylène (éthène) : C₂H₄, plan. Acétylène (éthyne) : C₂H₂, linéaire."],
-      ["Test d’une liaison double ou triple", "Le composé décolore l’eau de brome ; un alcane ne la décolore pas."],
-      ["Hydrogénation d’un alcène", "Addition de H₂ (catalyseur : nickel) : on obtient l’alcane correspondant. C₂H₄ + H₂ → C₂H₆."],
-      ["Hydratation d’un alcène", "Addition d’eau (catalyseur acide) : on obtient un alcool. C₂H₄ + H₂O → C₂H₅OH (éthanol)."],
-      ["Polymérisation de l’éthylène", "n CH₂=CH₂ → –(CH₂–CH₂)ₙ– : le polyéthylène."],
-      ["Isomérie Z/E", "Pour une double liaison dont chaque carbone porte deux groupes différents : Z (même côté) ou E (côtés opposés)."],
-      ["Nom de CH₃–CH=CH–CH₃", "But-2-ène."],
-      ["Préparation de l’acétylène", "Carbure de calcium + eau : CaC₂ + 2 H₂O → C₂H₂ + Ca(OH)₂."]
-    ],
-    sujets: [] }
-);
-
-Object.assign(QUIZ, {
-  "pct-cine": [
-    { t: "v", q: "72 km/h, c’est combien de m/s ?", r: 20, p: [72, 7.2, 259.2], u: "m/s", e: "72 ÷ 3,6 = 20 m/s." },
-    { t: "c", q: "Selon le principe d’inertie, un solide pseudo-isolé est…", r: "au repos ou en mouvement rectiligne uniforme", p: ["toujours au repos", "en mouvement circulaire", "en chute libre"], e: "Les forces se compensent : la vitesse ne change pas." },
-    { t: "c", q: "La loi horaire d’un mouvement rectiligne uniforme est…", r: "x = v·t + x_{0}", p: ["x = ½a·t²", "v = a·t", "x = v·t²"], e: "Vitesse constante." },
-    { t: "c", q: "Un objet lancé horizontalement a une trajectoire…", r: "parabolique", p: ["rectiligne", "circulaire", "verticale"], e: "x = v₀t et y = −½gt² donnent une parabole." },
-    { t: "v", q: "Un cycliste roule à 5 m/s pendant 2 minutes. Quelle distance parcourt-il, en mètres ?", r: 600, p: [10, 300, 1200], u: "m", e: "2 min = 120 s ; d = 5 × 120 = 600 m." }
-  ],
-  "pct-trav": [
-    { t: "c", q: "L’unité du travail d’une force est…", r: "le joule (J)", p: ["le watt (W)", "le newton (N)", "le kilogramme (kg)"], e: "Le watt est l’unité de la puissance, le newton celle de la force." },
-    { t: "v", q: "Un sac de 50 kg est monté de 2 m. Travail du poids (g = 10 N/kg), en joules ?", r: -1000, p: [1000, 100, -100], u: "J", e: "À la montée, le travail du poids est négatif : W = −mgh = −50 × 10 × 2 = −1 000 J." },
-    { t: "v", q: "Un fruit de 0,2 kg tombe d’une branche à 5 m de haut. Travail de son poids (g = 10 N/kg) ?", r: 10, p: [-10, 1, 100], u: "J", e: "Il descend : W = + mgh = 0,2 × 10 × 5 = 10 J (travail moteur)." },
-    { t: "c", q: "Le travail de la réaction normale d’un support sans frottement est…", r: "nul", p: ["toujours positif", "toujours négatif", "égal au travail du poids"], e: "Elle est perpendiculaire au déplacement : cos 90° = 0." },
-    { t: "c", q: "Le travail du poids entre A et B dépend…", r: "seulement de la différence d’altitude entre A et B", p: ["du chemin suivi", "de la vitesse", "de la durée du trajet"], e: "W = mg(z_{A} − z_{B}), quel que soit le chemin." },
-    { t: "v", q: "Une force de 200 N tire une caisse sur 50 m, en faisant un angle de 60° avec le déplacement. Travail de la force, en joules ?", r: 5000, p: [10000, 8660, 2500], u: "J", e: "W = F × d × cos 60° = 200 × 50 × 0,5 = 5 000 J." },
-    { t: "v", q: "Un moteur fournit un travail de 1 200 J en 1 minute. Sa puissance moyenne, en watts ?", r: 20, p: [1200, 72000, 2], u: "W", e: "P = W / Δt = 1 200 / 60 = 20 W (convertir 1 min en 60 s)." },
-    { t: "v", q: "Une force de 50 N déplace un objet à 2 m/s, dans le sens du mouvement. Puissance, en watts ?", r: 100, p: [25, 52, 200], u: "W", e: "P = F × v = 50 × 2 = 100 W." },
-    { t: "c", q: "Une force de frottement fait toujours un travail…", r: "résistant (négatif)", p: ["moteur (positif)", "nul", "égal à zéro à vitesse constante"], e: "Elle s’oppose au mouvement : W = −f × L." },
-    { t: "c", q: "1 kWh vaut…", r: "3,6 × 10^{6} J", p: ["1 000 J", "3 600 J", "3,6 × 10^{3} W"], e: "1 000 W pendant 3 600 s." }
-  ],
-  "pct-ec": [
-    { t: "c", q: "L’énergie cinétique d’un solide en translation est…", r: "E_{c} = ½ m v²", p: ["E_{c} = m g h", "E_{c} = m v", "E_{c} = ½ m v"], e: "m en kg, v en m/s, E_{c} en joules." },
-    { t: "v", q: "Énergie cinétique d’une voiture de 1 000 kg roulant à 72 km/h, en joules ?", r: 200000, p: [2592000, 36000, 20000], u: "J", e: "72 km/h = 20 m/s ; E_{c} = ½ × 1 000 × 20² = 200 000 J. Piège : oublier de convertir donne 2 592 000 J." },
-    { t: "c", q: "Si la vitesse d’un objet double, son énergie cinétique est…", r: "multipliée par 4", p: ["multipliée par 2", "inchangée", "divisée par 2"], e: "E_{c} dépend de v² : 2² = 4." },
-    { t: "c", q: "Le théorème de l’énergie cinétique s’écrit…", r: "E_{c}(B) − E_{c}(A) = Σ W_{AB}(forces extérieures)", p: ["E_{c}(A) + E_{c}(B) = 0", "E_{c}(B) = m g h", "Σ W = 0 toujours"], e: "Dans un référentiel galiléen." },
-    { t: "v", q: "Un objet tombe sans vitesse initiale d’une hauteur de 5 m (sans frottements, g = 10 N/kg). Sa vitesse en bas, en m/s ?", r: 10, p: [50, 100, 5], u: "m/s", e: "v = @sqrt{2gh} = @sqrt{2 × 10 × 5} = @sqrt{100} = 10 m/s." },
-    { t: "c", q: "Pendant un freinage, la somme des travaux des forces est…", r: "négative", p: ["positive", "nulle", "égale à l’énergie cinétique finale"], e: "L’énergie cinétique diminue." }
-  ],
-  "pct-em": [
-    { t: "c", q: "L’énergie mécanique est…", r: "E_{m} = E_{c} + E_{pp}", p: ["E_{m} = E_{c} − E_{pp}", "E_{m} = m g z", "E_{m} = ½ m v²"], e: "Somme de l’énergie cinétique et de l’énergie potentielle." },
-    { t: "v", q: "Énergie potentielle de pesanteur d’une pierre de 0,5 kg à 20 m du sol (référence : le sol, g = 10 N/kg), en joules ?", r: 100, p: [10, 1000, 200], u: "J", e: "E_{pp} = mgz = 0,5 × 10 × 20 = 100 J." },
-    { t: "c", q: "Sans frottements, l’énergie mécanique d’un objet en chute…", r: "reste constante", p: ["augmente", "diminue", "devient nulle au sol"], e: "E_{pp} se transforme en E_{c}." },
-    { t: "c", q: "Avec des frottements, l’énergie mécanique…", r: "diminue", p: ["reste constante", "augmente", "ne dépend pas des frottements"], e: "ΔE_{m} = W(frottements) < 0 : elle devient de la chaleur." },
-    { t: "c", q: "Dans un barrage hydroélectrique, l’énergie potentielle de l’eau devient d’abord…", r: "de l’énergie cinétique", p: ["de l’énergie chimique", "de l’énergie nucléaire", "de la chaleur seulement"], e: "Puis la turbine et l’alternateur la transforment en énergie électrique." }
-  ],
-  "pct-anal": [
-    { t: "c", q: "Pour mettre en évidence le carbone d’un composé organique, on montre que sa combustion…", r: "donne un gaz qui trouble l’eau de chaux", p: ["bleuit le sulfate de cuivre anhydre", "bleuit le papier pH", "décolore l’eau de brome"], e: "Ce gaz est le CO₂. Le sulfate de cuivre anhydre détecte l’eau (donc l’hydrogène)." },
-    { t: "c", q: "Le sulfate de cuivre anhydre permet de détecter…", r: "l’eau, donc l’hydrogène", p: ["le carbone", "l’azote", "l’oxygène"], e: "Il passe du blanc au bleu au contact de l’eau." },
-    { t: "v", q: "Un gaz a une densité par rapport à l’air d = 2. Sa masse molaire, en g/mol ?", r: 58, p: [29, 31, 14.5], u: "g/mol", e: "M = 29 × d = 29 × 2 = 58 g/mol (c’est le butane C₄H₁₀)." },
-    { t: "v", q: "Pourcentage massique de carbone dans le méthane CH₄ (C = 12, H = 1) ?", r: 75, p: [25, 80, 12], u: "%", e: "M = 16 g/mol ; %C = 12/16 × 100 = 75 %." },
-    { t: "v", q: "La combustion d’un échantillon donne 4,4 g de CO₂. Masse de carbone dans l’échantillon, en grammes ?", r: 1.2, p: [4.4, 3.2, 0.44], u: "g", e: "m(C) = 12/44 × 4,4 = 1,2 g." },
-    { t: "v", q: "La combustion d’un échantillon donne 2,7 g d’eau. Masse d’hydrogène, en grammes ?", r: 0.3, p: [2.7, 0.15, 2.4], u: "g", e: "m(H) = 2/18 × 2,7 = 0,3 g." },
-    { t: "c", q: "Deux isomères ont…", r: "la même formule brute et des formules développées différentes", p: ["la même formule développée", "des formules brutes différentes", "les mêmes propriétés"], e: "Exemple : butane et méthylpropane (C₄H₁₀)." },
-    { t: "c", q: "Lequel n’est PAS un composé organique ?", r: "le dioxyde de carbone CO₂", p: ["le méthane CH₄", "l’éthanol C₂H₆O", "le butane C₄H₁₀"], e: "CO, CO₂ et les carbonates sont classés parmi les composés minéraux." }
-  ],
-  "pct-alcanes": [
-    { t: "c", q: "La formule générale des alcanes est…", r: "C_{n}H_{2n+2}", p: ["C_{n}H_{2n}", "C_{n}H_{2n−2}", "C_{n}H_{n}"], e: "C_{n}H_{2n} : alcènes ; C_{n}H_{2n−2} : alcynes." },
-    { t: "c", q: "La formule de l’hexane est…", r: "C₆H₁₄", p: ["C₆H₁₂", "C₆H₆", "C₅H₁₂"], e: "n = 6 : 2 × 6 + 2 = 14." },
-    { t: "c", q: "Le nom de CH₃–CH(CH₃)–CH₂–CH₃ est…", r: "2-méthylbutane", p: ["3-méthylbutane", "pentane", "2-méthylpropane"], e: "Chaîne la plus longue : 4 carbones (butane) ; le méthyl est sur le carbone 2 (plus petit numéro)." },
-    { t: "v", q: "Combien d’isomères a l’alcane C₅H₁₂ ?", r: 3, p: [2, 4, 5], e: "Pentane, 2-méthylbutane, 2,2-diméthylpropane." },
-    { t: "c", q: "L’équation équilibrée de la combustion complète du propane est…", r: "C₃H₈ + 5 O₂ → 3 CO₂ + 4 H₂O", p: ["C₃H₈ + 3 O₂ → 3 CO₂ + 4 H₂O", "C₃H₈ + 5 O₂ → 3 CO₂ + 8 H₂O", "C₃H₈ + O₂ → CO₂ + H₂O"], e: "3 C → 3 CO₂ ; 8 H → 4 H₂O ; O : 6 + 4 = 10 atomes, soit 5 O₂." },
-    { t: "c", q: "La combustion incomplète d’un alcane est dangereuse car elle produit…", r: "du monoxyde de carbone (CO)", p: ["du dioxygène", "de l’eau", "du méthane"], e: "Gaz incolore, inodore et mortel : toujours aérer une cuisine au gaz." },
-    { t: "c", q: "CH₄ + Cl₂ → CH₃Cl + HCl est une réaction…", r: "de substitution", p: ["d’addition", "de combustion", "de polymérisation"], e: "Un H est remplacé par un Cl (à la lumière)." },
-    { t: "v", q: "Un alcane a une masse molaire de 72 g/mol. Combien d’atomes de carbone a-t-il ?", r: 5, p: [6, 4, 7], e: "14n + 2 = 72, donc n = 5 : C₅H₁₂." },
-    { t: "v", q: "Un alcane a un rapport (nombre d’atomes H) / (nombre d’atomes C) égal à 2,4. Combien d’atomes de carbone ?", r: 5, p: [4, 6, 12], e: "(2n + 2)/n = 2,4 → 2n + 2 = 2,4n → n = 5 (C₅H₁₂)." }
-  ],
-  "pct-alcenes": [
-    { t: "c", q: "La formule générale des alcènes est…", r: "C_{n}H_{2n}", p: ["C_{n}H_{2n+2}", "C_{n}H_{2n−2}", "C_{2n}H_{n}"], e: "Une double liaison C=C." },
-    { t: "c", q: "Un test simple pour reconnaître un alcène ou un alcyne :", r: "il décolore l’eau de brome", p: ["il trouble l’eau de chaux", "il bleuit le sulfate de cuivre anhydre", "il rougit le papier pH"], e: "Le dibrome s’additionne sur la liaison multiple." },
-    { t: "c", q: "L’hydrogénation de l’éthylène donne…", r: "de l’éthane", p: ["de l’éthanol", "de l’acétylène", "du polyéthylène"], e: "C₂H₄ + H₂ → C₂H₆ (catalyseur : nickel)." },
-    { t: "c", q: "L’hydratation de l’éthylène donne…", r: "de l’éthanol", p: ["de l’éthane", "de l’éthylène glycol", "du méthanol"], e: "C₂H₄ + H₂O → C₂H₅OH." },
-    { t: "c", q: "Le nom de CH₂=CH–CH₂–CH₃ est…", r: "but-1-ène", p: ["but-2-ène", "butane", "but-3-ène"], e: "On numérote pour que la double liaison ait le plus petit numéro : 1, pas 3." },
-    { t: "c", q: "Le polyéthylène est obtenu par…", r: "polymérisation de l’éthylène", p: ["combustion du méthane", "substitution du chlore", "hydratation de l’acétylène"], e: "n CH₂=CH₂ → –(CH₂–CH₂)ₙ–." },
-    { t: "c", q: "La formule de l’acétylène est…", r: "C₂H₂", p: ["C₂H₄", "C₂H₆", "CH₄"], e: "Triple liaison : C_{n}H_{2n−2} avec n = 2." }
-  ]
-});
-
-Object.assign(EXOS, {
-  "pct-trav": [
-    { id: "pct-x1", titre: "La grue du port de Cotonou", niveau: 1, duree: 20,
-      contexte: "Contexte : au port de Cotonou, une grue soulève verticalement un conteneur de masse m = 2 000 kg, à vitesse constante, d’une hauteur h = 15 m en 30 s.\nDonnée : g = 10 N/kg.\nTâche : étudier le travail et la puissance mis en jeu.",
-      questions: [
-        { q: "1. Fais le bilan des forces qui s’exercent sur le conteneur. Que dit le principe d’inertie ?",
-          corrige: "Deux forces : le **poids** @vec{P} (vertical, vers le bas) et la **tension du câble** @vec{T} (verticale, vers le haut).\nLe conteneur monte à vitesse constante en ligne droite : d’après le principe d’inertie, les forces se compensent : **T = P = mg = 2 000 × 10 = 20 000 N**." },
-        { q: "2. Calcule le travail du poids pendant la montée. Est-il moteur ou résistant ?",
-          corrige: "Le conteneur monte : W(@vec{P}) = −mgh = −2 000 × 10 × 15 = **−300 000 J = −3,0 × 10⁵ J**.\nIl est **résistant** (négatif) : le poids s’oppose à la montée.", type: "calcul" },
-        { q: "3. Calcule le travail de la tension du câble.",
-          corrige: "@vec{T} est dans le sens du déplacement (α = 0°) : W(@vec{T}) = T × h × cos 0° = 20 000 × 15 = **+3,0 × 10⁵ J** (moteur)." },
-        { q: "4. Calcule la puissance moyenne de la grue de deux façons.", indice: "P = W/Δt, et aussi P = T × v avec v = h/Δt.",
-          corrige: "P = @frac{W(@vec{T})}{Δt} = @frac{300 000}{30} = **10 000 W = 10 kW**.\nVérification : v = @frac{15}{30} = 0,5 m/s et P = T × v = 20 000 × 0,5 = 10 000 W. ✔",
-          retenir: "La puissance se calcule avec P = W/Δt ou P = F × v." }
-      ] },
-    { id: "pct-x2", titre: "La charrette tirée sur la route", niveau: 2, duree: 20,
-      contexte: "Contexte : Rodrigue tire une charrette chargée sur une route horizontale, sur une distance AB = 50 m, à vitesse constante. La corde fait un angle α = 30° avec la route et exerce une force F = 200 N. Les frottements de la route sont représentés par une force f opposée au mouvement.\nDonnées : cos 30° ≈ 0,866 ; g = 10 N/kg.",
-      questions: [
-        { q: "1. Calcule le travail de la force @vec{F} exercée par la corde entre A et B.",
-          corrige: "W_{AB}(@vec{F}) = F × AB × cos α = 200 × 50 × 0,866 ≈ **8 660 J** (moteur)." },
-        { q: "2. Quel est le travail du poids et celui de la réaction normale de la route ? Justifie.",
-          corrige: "La route est horizontale : le poids (vertical) et la réaction normale (verticale) sont **perpendiculaires au déplacement**.\nLeurs travaux sont **nuls** (cos 90° = 0)." },
-        { q: "3. La vitesse est constante. Que vaut la somme des travaux des forces ? Déduis-en le travail des frottements puis la valeur de f.", indice: "À vitesse constante, l’énergie cinétique ne change pas : utilise le théorème de l’énergie cinétique.",
-          corrige: "Vitesse constante : ΔE_{c} = 0, donc la somme des travaux est nulle (théorème de l’énergie cinétique).\nW(@vec{F}) + W(@vec{f}) + 0 + 0 = 0, donc W(@vec{f}) = **−8 660 J**.\nW(@vec{f}) = −f × AB, donc f = @frac{8 660}{50} ≈ **173 N**." },
-        { q: "4. Rodrigue met 1 min 40 s pour aller de A à B. Calcule la puissance moyenne qu’il développe.",
-          corrige: "Δt = 100 s. P = @frac{W(@vec{F})}{Δt} = @frac{8 660}{100} ≈ **87 W**.", type: "unite", retenir: "Convertir le temps en secondes avant de calculer." }
-      ] }
-  ],
-  "pct-ec": [
-    { id: "pct-x3", titre: "Le toboggan du centre de loisirs", niveau: 2, duree: 25,
-      contexte: "Contexte : un enfant de masse m = 30 kg part sans vitesse du haut d’un toboggan (point A). Le bas du toboggan (point B) est h = 3,2 m plus bas. La longueur de la glissière est L = 6 m.\nDonnée : g = 10 N/kg.\nTâche : aider le responsable du centre à vérifier la sécurité du toboggan.",
-      questions: [
-        { q: "1. On néglige d’abord les frottements. Fais le bilan des forces et calcule le travail de chacune entre A et B.",
-          corrige: "• Le **poids** : W(@vec{P}) = + mgh = 30 × 10 × 3,2 = **960 J** (l’enfant descend).\n• La **réaction** du toboggan, perpendiculaire à la glissière (sans frottements) : **W = 0**." },
-        { q: "2. Énonce le théorème de l’énergie cinétique, puis calcule la vitesse de l’enfant en B.",
-          corrige: "Dans un référentiel galiléen, la variation d’énergie cinétique entre A et B est égale à la somme des travaux des forces extérieures.\nE_{c}(B) − E_{c}(A) = W(@vec{P}) + W(@vec{R}), avec E_{c}(A) = 0 (départ arrêté) :\n½ m v_{B}² = 960, donc v_{B}² = @frac{2 × 960}{30} = 64 et **v_{B} = 8 m/s** (≈ 29 km/h).", type: "calcul" },
-        { q: "3. En réalité, on mesure v_{B} = 6 m/s. Calcule l’énergie cinétique réelle en B, puis le travail des frottements.",
-          corrige: "E_{c}(B) = ½ × 30 × 6² = **540 J**.\nThéorème : 540 − 0 = 960 + 0 + W(@vec{f}), donc **W(@vec{f}) = −420 J**." },
-        { q: "4. Déduis-en la valeur de la force de frottement, supposée constante.",
-          corrige: "W(@vec{f}) = −f × L, donc f = @frac{420}{6} = **70 N**." },
-        { q: "5. Après B, l’enfant glisse sur une piste horizontale où la force de frottement vaut aussi 70 N. Quelle distance parcourt-il avant de s’arrêter ?",
-          corrige: "Entre B et l’arrêt C : E_{c}(C) − E_{c}(B) = W(@vec{f}) (poids et réaction ne travaillent pas sur le plat).\n0 − 540 = −70 × d, donc **d = @frac{540}{70} ≈ 7,7 m**.\nLe bac de réception doit donc mesurer au moins 7,7 m.",
-          retenir: "Distance d’arrêt sur le plat : d = E_{c} / f." }
-      ] }
-  ],
-  "pct-em": [
-    { id: "pct-x4", titre: "Le ballon lancé vers le ciel", niveau: 2, duree: 20,
-      contexte: "Contexte : Afi lance un ballon de masse m = 0,45 kg verticalement vers le haut, avec une vitesse v_{0} = 12 m/s, depuis une hauteur de 1,5 m au-dessus du sol. On néglige les frottements de l’air.\nDonnées : g = 10 N/kg ; on prend le sol comme référence (E_{pp} = 0 au sol).",
-      questions: [
-        { q: "1. Calcule l’énergie cinétique, l’énergie potentielle et l’énergie mécanique du ballon au moment du lancer.",
-          corrige: "E_{c} = ½ × 0,45 × 12² = **32,4 J**.\nE_{pp} = mgz = 0,45 × 10 × 1,5 = **6,75 J**.\nE_{m} = 32,4 + 6,75 = **39,15 J**." },
-        { q: "2. Que devient l’énergie mécanique pendant le mouvement ? Pourquoi ?",
-          corrige: "Les frottements sont négligés : seul le poids travaille, l’énergie mécanique **se conserve** : E_{m} = 39,15 J tout au long du mouvement." },
-        { q: "3. Calcule la hauteur maximale atteinte par le ballon.",
-          corrige: "Au sommet, la vitesse est nulle : E_{c} = 0, donc E_{pp} = E_{m}.\nmgz_{max} = 39,15, donc z_{max} = @frac{39,15}{0,45 × 10} = **8,7 m** au-dessus du sol." },
-        { q: "4. Avec quelle vitesse le ballon touche-t-il le sol ?",
-          corrige: "Au sol, z = 0 : E_{pp} = 0, donc E_{c} = E_{m} = 39,15 J.\nv² = @frac{2 × 39,15}{0,45} = 174, donc **v ≈ 13,2 m/s**.\nC’est plus que 12 m/s : le ballon est parti de 1,5 m de haut.", type: "calcul" }
-      ] }
-  ],
-  "pct-anal": [
-    { id: "pct-x5", titre: "Retrouver la formule d’un liquide inconnu", niveau: 2, duree: 25,
-      contexte: "Contexte : au laboratoire, on dispose d’un liquide organique A qui ne contient que du carbone, de l’hydrogène et de l’oxygène. Sa masse molaire est M = 46 g/mol.\nOn brûle complètement m = 2,3 g de A : on obtient 4,4 g de dioxyde de carbone et 2,7 g d’eau.\nDonnées : C = 12 ; H = 1 ; O = 16 (g/mol).",
-      questions: [
-        { q: "1. Comment pourrait-on montrer, par l’expérience, que A contient du carbone et de l’hydrogène ?",
-          corrige: "• Carbone : le gaz produit par la combustion **trouble l’eau de chaux** (c’est du CO₂).\n• Hydrogène : la combustion produit de l’eau, qui fait passer le **sulfate de cuivre anhydre** du blanc au bleu." },
-        { q: "2. Calcule les masses de carbone, d’hydrogène et d’oxygène dans les 2,3 g de A.",
-          corrige: "m(C) = @frac{12}{44} × 4,4 = **1,2 g**.\nm(H) = @frac{2}{18} × 2,7 = **0,3 g**.\nm(O) = 2,3 − 1,2 − 0,3 = **0,8 g**.", type: "calcul" },
-        { q: "3. Déduis-en la composition centésimale de A.",
-          corrige: "%C = @frac{1,2}{2,3} × 100 ≈ **52,2 %** ; %H = @frac{0,3}{2,3} × 100 ≈ **13,0 %** ; %O = @frac{0,8}{2,3} × 100 ≈ **34,8 %**." },
-        { q: "4. Détermine la formule brute de A.", indice: "12x/%C = y/%H = 16z/%O = M/100.",
-          corrige: "@frac{M}{100} = 0,46.\nx = @frac{0,46 × 52,2}{12} ≈ 2 ; y = 0,46 × 13,0 ≈ 6 ; z = @frac{0,46 × 34,8}{16} ≈ 1.\n**A a pour formule brute C₂H₆O.** Vérification : 2 × 12 + 6 + 16 = 46 g/mol. ✔" },
-        { q: "5. Écris l’équation équilibrée de la combustion complète de A.",
-          corrige: "**C₂H₆O + 3 O₂ → 2 CO₂ + 3 H₂O**.\nVérification : C : 2 = 2 ; H : 6 = 6 ; O : 1 + 6 = 4 + 3 = 7. ✔",
-          retenir: "Équilibrer dans l’ordre : C, puis H, puis O en dernier." }
-      ] },
-    { id: "pct-x6", titre: "Le gaz de la bouteille de cuisine", niveau: 1, duree: 20,
-      contexte: "Contexte : la mère de Bola cuisine au gaz. Le gaz de la bouteille est un alcane A dont la densité par rapport à l’air vaut d = 2.\nDonnées : C = 12 ; H = 1 ; O = 16 (g/mol) ; volume molaire V_{m} = 22,4 L/mol.",
-      questions: [
-        { q: "1. Calcule la masse molaire de A.", corrige: "M = 29 × d = 29 × 2 = **58 g/mol**." },
-        { q: "2. Trouve la formule brute de A et son nom.", indice: "Un alcane : C_{n}H_{2n+2}, donc M = 14n + 2.",
-          corrige: "14n + 2 = 58, donc n = 4 : **C₄H₁₀**, le **butane**." },
-        { q: "3. Écris les formules semi-développées et les noms des isomères de A.",
-          corrige: "• CH₃–CH₂–CH₂–CH₃ : **butane** ;\n• CH₃–CH(CH₃)–CH₃ : **méthylpropane** (2-méthylpropane)." },
-        { q: "4. Écris l’équation de la combustion complète du butane.",
-          corrige: "**2 C₄H₁₀ + 13 O₂ → 8 CO₂ + 10 H₂O** (ou C₄H₁₀ + @frac{13}{2} O₂ → 4 CO₂ + 5 H₂O)." },
-        { q: "5. Quel volume de dioxygène faut-il pour brûler 58 g de butane (conditions normales) ?",
-          corrige: "58 g de butane = 1 mol. D’après l’équation, 1 mol de butane réagit avec @frac{13}{2} = 6,5 mol de O₂.\nV = 6,5 × 22,4 = **145,6 L** de dioxygène." },
-        { q: "6. Pourquoi faut-il bien aérer la cuisine ?",
-          corrige: "Si l’air manque, la combustion est **incomplète** : elle produit du **monoxyde de carbone (CO)**, un gaz incolore, inodore et mortel, et de la suie." }
-      ] }
-  ],
-  "pct-alcanes": [
-    { id: "pct-x7", titre: "Nommer et reconnaître les alcanes", niveau: 1, duree: 15,
-      contexte: "Tâche : appliquer les règles de nomenclature et d’isomérie des alcanes.",
-      questions: [
-        { q: "1. Nomme les alcanes suivants :\na) CH₃–CH(CH₃)–CH₂–CH₃\nb) CH₃–CH₂–CH(CH₃)–CH₂–CH₃\nc) CH₃–CH(CH₃)–CH(CH₃)–CH₃\nd) CH₃–C(CH₃)₂–CH₃",
-          corrige: "a) **2-méthylbutane**\nb) **3-méthylpentane**\nc) **2,3-diméthylbutane**\nd) **2,2-diméthylpropane**",
-          retenir: "Chaîne la plus longue, puis plus petits numéros, puis préfixes di-, tri-." },
-        { q: "2. Écris la formule semi-développée du 2,2,4-triméthylpentane (un constituant de l’essence).",
-          corrige: "Chaîne de 5 carbones ; deux méthyls sur le carbone 2 et un sur le carbone 4 :\n**CH₃–C(CH₃)₂–CH₂–CH(CH₃)–CH₃**." },
-        { q: "3. Un alcane B a un rapport (atomes H) / (atomes C) égal à 2,4. Trouve sa formule brute puis écris et nomme tous ses isomères.",
-          corrige: "@frac{2n + 2}{n} = 2,4, donc 2n + 2 = 2,4n, soit n = 5 : **C₅H₁₂**.\nIsomères :\n• CH₃–CH₂–CH₂–CH₂–CH₃ : pentane ;\n• CH₃–CH(CH₃)–CH₂–CH₃ : 2-méthylbutane ;\n• CH₃–C(CH₃)₂–CH₃ : 2,2-diméthylpropane." },
-        { q: "4. Écris l’équation de la monochloration du méthane. Quelle condition faut-il ?",
-          corrige: "**CH₄ + Cl₂ → CH₃Cl + HCl**, en présence de **lumière**. C’est une réaction de **substitution** (un H est remplacé par un Cl)." }
-      ] }
-  ],
-  "pct-alcenes": [
-    { id: "pct-x8", titre: "De l’éthylène au sachet plastique", niveau: 2, duree: 15,
-      contexte: "Contexte : les sachets plastiques sont fabriqués à partir de l’éthylène, un gaz obtenu à partir du pétrole.\nDonnées : C = 12 ; H = 1 (g/mol).",
-      questions: [
-        { q: "1. Donne la formule brute et la formule développée de l’éthylène. À quelle famille appartient-il ?",
-          corrige: "C₂H₄, formule développée CH₂=CH₂ (molécule plane). Il a une double liaison C=C : c’est un **alcène**." },
-        { q: "2. Comment distinguer l’éthylène de l’éthane au laboratoire ?",
-          corrige: "On fait passer chaque gaz dans de l’**eau de brome** : l’éthylène la **décolore** (addition sur la double liaison), l’éthane non." },
-        { q: "3. Écris les équations de l’hydrogénation et de l’hydratation de l’éthylène, et nomme les produits.",
-          corrige: "Hydrogénation (catalyseur nickel) : **C₂H₄ + H₂ → C₂H₆** (éthane).\nHydratation (catalyseur acide) : **C₂H₄ + H₂O → C₂H₅OH** (éthanol)." },
-        { q: "4. Écris l’équation de la polymérisation de l’éthylène. Quelle est la masse molaire d’un polyéthylène de degré de polymérisation n = 1 000 ?",
-          corrige: "**n CH₂=CH₂ → –(CH₂–CH₂)ₙ–** : le polyéthylène.\nMotif CH₂–CH₂ : 28 g/mol. M = 1 000 × 28 = **28 000 g/mol**." }
       ] }
   ]
 });
@@ -2596,8 +2374,9 @@ function supportEl(sujet) {
 
 /* ---------- État ---------- */
 const DEFAUTS = {
-  prenom: "",
+  prenom: "Mawouena",
   coach: "Will",
+  coucher: "23:00",
   objectif: 75,
   rythme: { mode: 3, debut: null },
   moyennePrecedente: null,
@@ -2753,6 +2532,7 @@ function fusionConfig(d) {
   c.objectif = clamp(Number(c.objectif) || 75, 10, 240);
   const r = Object.assign({}, DEFAUTS.rythme, (d && d.rythme) || {});
   c.rythme = { mode: [1, 2, 3, 4].includes(r.mode) ? r.mode : 3, debut: /^\d{4}-\d{2}-\d{2}$/.test(r.debut || "") ? r.debut : null };
+  if (!/^(19|2[0-3]):[0-5]\d$/.test(c.coucher || "")) c.coucher = DEFAUTS.coucher;
   return c;
 }
 const majConfig = (changes) => Store.ecrire("app", "config", Object.assign({}, S.config, changes));
@@ -2920,7 +2700,7 @@ async function demanderRetour(chrono, absentMs) {
     texte: "Le chrono s’est mis en pause. C’était pour réviser (cahier, manuel, exercice sur papier) ?",
     boutons: [
       { label: "Oui, c’était du travail : compte ce temps", valeur: "travail", cls: "primaire" },
-      { label: "Non, j’ai décroché", valeur: "decroche" }
+      { label: "Non, autre chose : ne compte pas ce temps", valeur: "decroche" }
     ]
   });
   if (v === "travail") chrono.crediter(absentMs);
@@ -3162,11 +2942,6 @@ function derniereMatiere() {
 }
 const maitriseDe = (chapId) => (S.chapitres.get(chapId) || {}).maitrise || 0;
 
-/* ---------- TikTok ---------- */
-const TIKTOK = [["0", "0"], ["30", "< 30 min"], ["60", "30 min – 1 h"], ["120", "1 h – 2 h"], ["180", "2 h – 3 h"], ["240", "3 h et +"]];
-const TIKTOK_MILIEU = { "0": 0, "30": 15, "60": 45, "120": 90, "180": 150, "240": 210 };
-const TIKTOK_LIB = Object.fromEntries(TIKTOK);
-
 /* ---------- Notes ---------- */
 const MATIERES_NOTES = () => [
   ...Object.values(MATIERES).map((m) => [m.id, m.long]), ["eps", "EPS"], ["autre", "Autre"]
@@ -3229,7 +3004,7 @@ function classementChapitres() {
     const depuis = der ? daysBetween(der, auj) : 28;
     const recence = Math.min(depuis, 21) / 7 + 0.3;
     const alterne = derMat === c.mat ? 0.7 : 1;
-    const pertinence = c.devoir ? 1 : 0.3;
+    const pertinence = c.devoir || c.socle ? 1 : 0.3;
     return { c, score: besoin * poidsMatiere(c.mat) * pertinence * recence * alterne };
   }).sort((a, b) => b.score - a.score).map((x) => x.c);
 }
@@ -3272,6 +3047,41 @@ function blocsFaitsDuJour(d) {
   return n;
 }
 
+/* ---------- Le sommeil d’abord ----------
+   Couchée vers 23 h, cours à 7 h : la séance finit 30 min avant le coucher
+   (écran fermé, sac prêt). Si elle commence tard, le carnet raccourcit la séance
+   au lieu de la faire veiller. L’heure du coucher se règle dans Plus. */
+const SAS_SOMMEIL = 30;
+const COUCHERS = ["21:30", "22:00", "22:30", "23:00", "23:30"];
+function heureCoucher() {
+  const m = /^(\d{2}):(\d{2})$/.exec(S.config.coucher || "");
+  return m ? Number(m[1]) * 60 + Number(m[2]) : 23 * 60;
+}
+const finTravailMin = () => heureCoucher() - SAS_SOMMEIL;
+const fmtHM = (m) => `${Math.floor(m / 60)} h${m % 60 ? " " + String(m % 60).padStart(2, "0") : ""}`;
+// Heure limite de la soirée qui contient ts. Avant 5 h du matin, c’est encore la soirée de la veille.
+function limiteDuSoir(ts) {
+  const d = new Date(ts == null ? Date.now() : ts);
+  if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime() + finTravailMin() * 60000;
+}
+// 2 minutes de tolérance : commencer à 21 h 36 au lieu de 21 h 35 ne doit pas faire sauter un bloc
+const MARGE_SOMMEIL = 2;
+const finiAvantLimite = (ts) => ts <= limiteDuSoir(ts) + MARGE_SOMMEIL * 60000;
+// Combien de blocs (au plus `voulus`) peuvent finir avant l’heure limite, en commençant maintenant
+function blocsPossibles(voulus) {
+  const t = Date.now();
+  const lim = limiteDuSoir(t) + MARGE_SOMMEIL * 60000;   // avant 5 h du matin : limite de la veille, déjà passée
+  let k = voulus;
+  while (k > 0 && t + dureeSeance(k) * 60000 > lim) k--;
+  return k;
+}
+const debutAuPlusTard = (nb) => finTravailMin() - dureeSeance(nb);
+// La soirée d’une séance : une séance finie à 0 h 40 compte pour la veille
+const soireeDe = (ts) => dateKey(new Date(ts - 5 * 3600000));
+const FORMES = { 1: "épuisée", 2: "fatiguée", 3: "ça va", 4: "en forme" };
+
 const classementMat = (mat) => classementChapitres().filter((c) => c.mat === mat);
 function lireMemoChap() {
   let memo = null;
@@ -3302,6 +3112,8 @@ const ROLES_BLOC = {
   langue: { nom: "Vocabulaire et grammaire", detail: "cartes, quiz, exercice corrigé" }
 };
 const matieresActives = () => Object.keys(MATIERES).filter((m) => epreuveActive(m) && CHAPITRES.some((c) => c.mat === m && chapitreActif(c)));
+// Une matière sans chapitre (la PCT, en attente du cahier) n’apparaît ni dans les révisions ni dans le suivi des chapitres
+const aDuContenu = (m) => CHAPITRES.some((c) => c.mat === m);
 function matieresDuSoir(nb) {
   const auj = todayKey();
   const actives = matieresActives();
@@ -4031,8 +3843,10 @@ function lancerSoiree(opts) {
     const faits = blocsFaitsDuJour(todayKey());
     const bonus = !!opts.bonus || faits >= nb;
     const plan = planSeance(bonus ? 1 : nb);
-    const blocs = bonus ? plan.blocs : plan.blocs.slice(Math.min(faits, plan.blocs.length - 1));
-    if (!blocs.length) { toast("Aucune matière à réviser : coche tes matières dans l’onglet Plus."); return; }
+    const tous = bonus ? plan.blocs : plan.blocs.slice(Math.min(faits, plan.blocs.length - 1));
+    if (!tous.length) { toast("Aucune matière à réviser : coche tes matières dans l’onglet Plus."); return; }
+    const blocs = tous.slice(0, blocsPossibles(tous.length));
+    if (!blocs.length) { toast(`Trop tard pour un bloc ce soir : ferme l’écran, au lit à ${fmtHM(heureCoucher())}.`); planifierRendu(); return; }
     if (!(S.config.rythme || {}).debut) majConfig({ rythme: Object.assign({}, S.config.rythme, { debut: todayKey() }) });
     etat = {
       v: 1, id: uid(), date: todayKey(), debut: Date.now(), maj: Date.now(), bonus,
@@ -4070,7 +3884,8 @@ function lancerSoiree(opts) {
       pauses: etat.pauses, pauseDepassee: somme(etat.pauses.map((x) => x.depasse || 0)),
       etapes: etat.resultats.map((e) => ({ type: e.type, chap: e.chap || null, mat: e.mat || (e.chap && CHAP[e.chap] ? CHAP[e.chap].mat : null), resume: e.resume || "", note: e.note ?? null, bloc: e.bloc || null })),
       sorties: chrono.sorties, decroches: chrono.decroches,
-      concentration: extra && "concentration" in extra ? extra.concentration : (avant.concentration ?? null),
+      forme: extra && "forme" in extra ? extra.forme : (avant.forme ?? null),
+      coupeSommeil: !!etat.coupeSommeil,
       commentaire: extra && "commentaire" in extra ? extra.commentaire : (avant.commentaire || ""),
       origine: "soiree"
     });
@@ -4146,14 +3961,14 @@ function lancerSoiree(opts) {
     vider(f.corps).append(
       h("div", { class: "sujet" }, h("div", { class: "petit" }, etat.bonus ? "Bloc bonus" : "Ce soir"),
         h("div", { class: "t" }, `${libelleBlocs(nb)}${nb > 1 ? `, ${pluriel(nb - 1, "pause")} de ${DUREE_PAUSE} min` : ""}`),
-        h("p", { class: "sous" }, `${fmtMin(dureeSeance(nb))} en tout · fin prévue vers ${heureFr(new Date(Date.now() + dureeSeance(nb) * 60000))}`)),
+        h("p", { class: "sous" }, `${fmtMin(dureeSeance(nb))} en tout · fin prévue vers ${heureFr(new Date(Date.now() + dureeSeance(nb) * 60000))}, au lit à ${fmtHM(heureCoucher())}`)),
       h("ol", { class: "plan" }, etat.plan.blocs.map((b, k) => h("li", null,
         h("span", { class: "ico tnum", style: "font-weight:700" }, String(k + 1)),
         h("span", { class: "lbl" }, h("b", null, b.titre), h("span", null, `${CHAP[b.chap].court} · ${ROLES_BLOC[b.role].detail}`)),
         h("span", { class: "min tnum" }, `${DUREE_BLOC} min`)))),
       h("p", null, h("b", null, "Avant de commencer (30 secondes) :")),
       h("div", { class: "carte" }, rituel.map((r) => h("label", { class: "case" }, h("input", { type: "checkbox" }), h("span", null, r)))),
-      bandeau("info", `Chaque bloc dure ${DUREE_BLOC} minutes : quand une activité est finie, la suivante démarre. Le chrono se met en pause si tu quittes l’appli, et les pauses trop longues sont notées.`),
+      bandeau("info", `Chaque bloc dure ${DUREE_BLOC} minutes : quand une activité est finie, la suivante démarre. Le chrono se met en pause si tu quittes l’appli. À ${fmtHM(finTravailMin())}, le carnet te dit d’arrêter : le sommeil passe avant.`),
       h("button", { class: "btn grand primaire", type: "button", onclick: () => { preparerSon(); demarrerBloc(false); } }, icone("lecture"), "C’est parti"));
   };
   const ecranReprise = () => {
@@ -4163,7 +3978,14 @@ function lancerSoiree(opts) {
       h("div", { class: "sujet" }, h("div", { class: "petit" }, "Séance en cours"),
         h("div", { class: "t" }, `Bloc ${etat.iBloc + 1} sur ${etat.plan.nb} · ${b.titre}`),
         h("p", { class: "sous" }, enCours ? `Il reste ${fmtMin(Math.max(1, Math.ceil(reste() / 60000)))} à ce bloc.` : `${pluriel(etat.msBlocs.length, "bloc")} déjà fait${etat.msBlocs.length > 1 ? "s" : ""}. On attaque le suivant.`)),
-      h("button", { class: "btn grand primaire", type: "button", onclick: () => { preparerSon(); demarrerBloc(enCours); } }, icone("lecture"), enCours ? "Reprendre le bloc" : `Commencer le bloc ${etat.iBloc + 1}`));
+      ...(() => {
+        const tard = !finiAvantLimite(Date.now() + (enCours ? Math.max(0, reste()) : DUREE_BLOC * 60000));
+        if (!tard) return [h("button", { class: "btn grand primaire", type: "button", onclick: () => { preparerSon(); demarrerBloc(enCours); } }, icone("lecture"), enCours ? "Reprendre le bloc" : `Commencer le bloc ${etat.iBloc + 1}`)];
+        return [bandeau("alerte", `Il est ${heureFr(new Date())} : ${enCours ? "la fin de ce bloc" : "ce bloc"} te ferait finir après ${fmtHM(finTravailMin())}. Pour être au lit à ${fmtHM(heureCoucher())}, arrête-toi là ce soir.`),
+          enCours ? null : h("button", { class: "btn grand primaire", type: "button", onclick: finirPourDormir }, icone("soir"), "Finir ma soirée et aller dormir"),
+          enCours ? h("p", { class: "petit" }, "Ferme la séance avec la croix en haut : ce que tu as fait est déjà enregistré.") : null,
+          h("button", { class: "btn grand", type: "button", onclick: () => { preparerSon(); demarrerBloc(enCours); } }, enCours ? "Finir le bloc quand même" : "Faire le bloc quand même")].filter(Boolean);
+      })());
   };
 
   function demarrerBloc(reprise) {
@@ -4250,31 +4072,49 @@ function lancerSoiree(opts) {
     ecrire(); sauver(); majChips();
     ecranPause(); tick();
   }
+  function finirPourDormir() {
+    if (etat.phase === "pause") finirPause(true);
+    jeton++;
+    etat.coupeSommeil = true;
+    etat.phase = "bilan"; ecrire(); sauver(); majChips(); tick();
+    bilan();
+  }
   function ecranPause() {
     const suivant = etat.plan.blocs[etat.iBloc + 1];
     const temps = h("div", { class: "pause-temps tnum" }, fmtChrono(DUREE_PAUSE * 60000));
-    const msg = h("p", { class: "pause-msg" }, "Lève-toi, bois de l’eau, regarde au loin. Pas de téléphone : 5 minutes de vidéos deviennent vite 30.");
+    const msg = h("p", { class: "pause-msg" }, "Lève-toi, bois de l’eau, regarde au loin. Une pause qui déborde, c’est du sommeil en moins ce soir.");
     const bouton = h("button", { class: "btn grand", type: "button", onclick: () => finirPause(false) }, "Reprendre maintenant");
+    const dodoTxt = h("span");
+    const dodo = h("div", { class: "pile", hidden: true, style: "width:100%" }, bandeau("alerte", dodoTxt),
+      h("button", { class: "btn grand primaire", type: "button", onclick: finirPourDormir }, icone("soir"), "Finir ma soirée et aller dormir"));
     vider(f.corps).append(h("div", { class: "pause-zone" },
       h("div", { class: "petit" }, `Pause ${etat.iBloc + 1} sur ${etat.plan.nb - 1} · bloc ${etat.iBloc + 1} terminé`),
       temps, msg,
       h("p", { class: "sous" }, `Ensuite : bloc ${etat.iBloc + 2} · ${suivant.titre} (${CHAP[suivant.chap].court})`),
-      bouton));
-    pauseEls = { temps, msg, bouton, sonne: false };
+      dodo, bouton));
+    pauseEls = { temps, msg, bouton, sonne: false, dodo, dodoTxt, tard: false };
     majPause();
   }
   function majPause() {
     if (!pauseEls || !etat.pauseDebut) return;
     const r = DUREE_PAUSE * 60000 - (Date.now() - etat.pauseDebut);
+    const finSuivant = Date.now() + Math.max(0, r) + DUREE_BLOC * 60000;
+    if (!pauseEls.tard && !finiAvantLimite(finSuivant)) {
+      pauseEls.tard = true; pauseEls.dodo.hidden = false; pauseEls.bouton.className = "btn grand";
+      vider(pauseEls.bouton).append("Faire le bloc quand même");
+      pauseEls.dodoTxt.textContent = `Il est ${heureFr(new Date())}. Le bloc ${etat.iBloc + 2} finirait vers ${heureFr(new Date(finSuivant))}, après ${fmtHM(finTravailMin())}. Pour être au lit à ${fmtHM(heureCoucher())}, arrête-toi là ce soir.`;
+    }
     if (r > 0) { pauseEls.temps.textContent = fmtChrono(r); return; }
     pauseEls.temps.textContent = "+" + fmtChrono(-r);
     pauseEls.temps.classList.add("depasse");
     if (!pauseEls.sonne) {
       pauseEls.sonne = true; bip(3);
-      pauseEls.bouton.className = "btn grand primaire";
-      vider(pauseEls.bouton).append(icone("lecture"), `Reprendre : bloc ${etat.iBloc + 2}`);
+      if (!pauseEls.tard) {
+        pauseEls.bouton.className = "btn grand primaire";
+        vider(pauseEls.bouton).append(icone("lecture"), `Reprendre : bloc ${etat.iBloc + 2}`);
+      }
     }
-    pauseEls.msg.textContent = -r > 60000 ? `Pause dépassée de ${fmtMin(Math.round(-r / 60000))} : c’est noté dans ton journal.` : "C’est l’heure : on y retourne.";
+    pauseEls.msg.textContent = pauseEls.tard ? "La pause est finie. Ce soir, le mieux est d’aller dormir." : -r > 60000 ? `Pause dépassée de ${fmtMin(Math.round(-r / 60000))} : ta séance finira d’autant plus tard.` : "C’est l’heure : on y retourne.";
   }
   function finirPause(arret) {
     if (etat.phase !== "pause") return;
@@ -4288,15 +4128,16 @@ function lancerSoiree(opts) {
   }
   function bilan() {
     majChips();
-    let concentration = null, commentaire = "";
+    let forme = null, commentaire = "";
     vider(f.corps).append(
       h("h3", { class: "h2" }, etat.bonus ? "Bloc bonus terminé" : "Bilan de la soirée"),
-      h("label", { class: "champ" }, "Ta concentration ce soir"),
-      choixUnique([[1, "Très dispersée"], [2, "Dispersée"], [3, "Moyenne"], [4, "Concentrée"], [5, "À fond"]], null, (v) => { concentration = Number(v); }),
+      ...(etat.coupeSommeil ? [bandeau("info", `Séance arrêtée à ${heureFr(new Date())} pour que tu sois au lit à ${fmtHM(heureCoucher())}. C’était le bon choix.`)] : []),
+      h("label", { class: "champ" }, "Ta forme ce soir", h("span", { class: "aide" }, `${coach()} voit ta réponse : si tu es souvent fatiguée, on allège la séance.`)),
+      choixUnique(Object.entries(FORMES).map(([k, lab]) => [Number(k), lab.charAt(0).toUpperCase() + lab.slice(1)]), null, (v) => { forme = Number(v); }),
       h("label", { class: "champ" }, "Ce que tu retiens, ou ce qui a bloqué (facultatif)",
         h("textarea", { id: "bilan-txt", style: "min-height:90px", oninput: (ev) => { commentaire = ev.target.value; } })),
       h("button", { class: "btn grand primaire", type: "button", onclick: () => {
-        ecrire({ concentration, commentaire });
+        ecrire({ forme, commentaire });
         etat.phase = "fini"; oublierSeance(); nettoyer();
         finale();
       } }, "Enregistrer ma soirée"));
@@ -4310,8 +4151,9 @@ function lancerSoiree(opts) {
       h("div", { class: "tampon-zone" },
         h("div", { class: "tampon" + (ok ? "" : " bleu") }, ok ? "Validé" : `${faits}/${prevus}`),
         h("p", null, etat.bonus ? `Bloc bonus : ${fmtMin(minutes)} de plus, ${fmtMin(auj)} ce soir.` : `${pluriel(faits, "bloc")} sur ${prevus} · ${fmtMin(auj)} de travail ce soir.`),
-        etat.pauses.length ? h("p", { class: "sous" }, dep ? `Pauses dépassées de ${fmtMin(dep)} au total. Demain, tiens-les.` : "Toutes les pauses tenues.") : null,
-        chrono.decroches ? h("p", { class: "sous" }, `${pluriel(chrono.decroches, "décrochage")} pendant la séance. Fais mieux demain.`) : null),
+        etat.pauses.length ? h("p", { class: "sous" }, dep ? `Pauses dépassées de ${fmtMin(dep)} : autant de sommeil en moins.` : "Toutes les pauses tenues.") : null,
+        finiAvantLimite(Date.now()) ? h("p", { class: "sous" }, icone("soir"), ` Fini à ${heureFr(new Date())}. Ferme l’écran, prépare ton sac et au lit à ${fmtHM(heureCoucher())}.`)
+          : h("p", { class: "sous" }, icone("soir"), ` Fini à ${heureFr(new Date())}, après ${fmtHM(finTravailMin())}. Au lit tout de suite. Demain, commence avant ${fmtHM(debutAuPlusTard(nbBlocsDuJour()))}.`)),
       h("button", { class: "btn grand primaire", type: "button", onclick: () => f.fermer(true) }, "Fermer"));
   }
 
@@ -4517,22 +4359,30 @@ function carteSeance(fait) {
   if (enCours) {
     const ou = enCours.phase === "pause" ? "en pause" : enCours.phase === "bilan" ? "il reste le bilan" : `bloc ${Math.min(enCours.iBloc + 1, enCours.plan.nb)} sur ${enCours.plan.nb}`;
     const b = enCours.plan.blocs[Math.min(enCours.iBloc, enCours.plan.blocs.length - 1)];
+    const tard = enCours.phase !== "bilan" && blocsPossibles(1) === 0;
     return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
       h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, `Séance en cours · ${ou}`)),
       h("p", { class: "sous" }, enCours.phase === "bilan" ? "Tous les blocs sont faits : remplis le bilan pour finir." : `${enCours.msBlocs.length} bloc${enCours.msBlocs.length > 1 ? "s" : ""} fait${enCours.msBlocs.length > 1 ? "s" : ""}. Prochain : ${b.titre} (${CHAP[b.chap].court}).`),
-      h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree({ reprise: lireSeanceEnCours() || enCours }) }, icone("lecture"), "Reprendre la séance"));
+      tard ? bandeau("alerte", `Il est ${heureFr(new Date())} : plus le temps pour un bloc entier avant ${fmtHM(finTravailMin())}. Ouvre la séance pour la terminer, puis va dormir.`) : null,
+      h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree({ reprise: lireSeanceEnCours() || enCours }) }, icone("lecture"), tard ? "Terminer ma séance" : "Reprendre la séance"));
   }
   if (faits >= nb) {
+    const bonusPossible = blocsPossibles(1) > 0;
     return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
       h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, "Séance faite ce soir")),
-      h("p", { class: "sous" }, `${pluriel(faits, "bloc")} sur ${nb} · ${fmtMin(fait)} de travail. Bravo, repose-toi ou fais un bloc de plus.`),
-      h("button", { class: "btn grand", type: "button", onclick: () => lancerSoiree({ bonus: true }) }, icone("lecture"), `Un bloc bonus de ${DUREE_BLOC} min`));
+      h("p", { class: "sous" }, `${pluriel(faits, "bloc")} sur ${nb} · ${fmtMin(fait)} de travail. ` + (bonusPossible ? "Bravo. Repose-toi, ou fais un bloc de plus." : `Bravo. Il est ${heureFr(new Date())} : ferme l’écran et va dormir, au lit à ${fmtHM(heureCoucher())}.`)),
+      bonusPossible ? h("button", { class: "btn grand", type: "button", onclick: () => lancerSoiree({ bonus: true }) }, icone("lecture"), `Un bloc bonus de ${DUREE_BLOC} min`) : null);
   }
   const plan = planSeance(nb);
   if (!plan.blocs.length) {
     return h("section", { class: "carte" }, h("h2", { class: "h2" }, "Rien à réviser"), h("p", { class: "sous" }, "Toutes les matières sont décochées, ou tous les chapitres sont marqués « pas encore vu ». Va dans Plus pour cocher tes matières."));
   }
-  const reste = plan.blocs.slice(Math.min(faits, plan.blocs.length - 1));
+  const debut = Math.min(faits, plan.blocs.length - 1);
+  const restePlan = plan.blocs.slice(debut);
+  const possibles = blocsPossibles(restePlan.length);
+  if (!possibles) return carteDormir(nb);
+  const reste = restePlan.slice(0, possibles);
+  const coupe = possibles < restePlan.length;
   const lignes = [];
   const ICO_ROLE = { sciences: "stylo", lettres: "bulle", langue: "cartes" };
   reste.forEach((b, k) => {
@@ -4541,18 +4391,30 @@ function carteSeance(fait) {
       h("span", { class: "lbl" }, h("b", null, `${faits + k + 1}. ${b.titre}`), h("span", null, `${CHAP[b.chap].court} · ${ROLES_BLOC[b.role].detail}`)),
       h("span", { class: "min tnum" }, `${DUREE_BLOC} min`)));
   });
+  const finPrevue = new Date(Date.now() + dureeSeance(reste.length) * 60000);
+  const soir = new Date().getHours() >= 18 || new Date().getHours() < 5;
   return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
     h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, faits ? `Il te reste ${pluriel(reste.length, "bloc")}` : `Ta séance de ce soir · ${fmtMin(dureeSeance(reste.length))}`)),
     h("p", { class: "sous" }, rythme),
+    coupe ? bandeau("alerte", h("b", null, `Il est ${heureFr(new Date())}.`), ` Pour finir avant ${fmtHM(finTravailMin())} et être au lit à ${fmtHM(heureCoucher())}, ce soir c’est ${pluriel(possibles, "bloc")} au lieu de ${restePlan.length}. Demain, commence avant ${fmtHM(debutAuPlusTard(nb))} pour faire les ${nb}.`)
+      : soir ? h("p", { class: "petit" }, icone("soir"), ` Si tu commences maintenant : fin vers ${heureFr(finPrevue)}, au lit à ${fmtHM(heureCoucher())}.`) : null,
     h("ol", { class: "plan" }, lignes),
     h("details", { class: "repli" }, h("summary", null, "Changer le programme de ce soir"),
-      h("div", { class: "pile" }, plan.blocs.map((b, k) => k < faits ? null : h("div", { class: "rangee", style: "justify-content:space-between;border-top:1px solid var(--ligne);padding-top:8px" },
+      h("div", { class: "pile" }, plan.blocs.map((b, k) => k < debut || k >= debut + possibles ? null : h("div", { class: "rangee", style: "justify-content:space-between;border-top:1px solid var(--ligne);padding-top:8px" },
         h("span", null, h("b", null, `Bloc ${k + 1} · ${MATIERES[b.mat].nom}`), h("span", { class: "petit", style: "display:block" }, CHAP[b.chap].court)),
         h("span", { class: "rangee" },
           h("button", { class: "btn petit-btn", type: "button", onclick: () => changerChapitreMat(b.mat) }, "Autre chapitre"),
           k > 0 || b.mat !== "maths" ? h("button", { class: "btn petit-btn", type: "button", onclick: () => changerMatiere(k) }, "Autre matière") : null)))),
       h("p", { class: "petit" }, "Le bloc de maths reste chaque soir : c’est la matière qui demande le plus d’entraînement.")),
     h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree() }, icone("lecture"), faits ? "Continuer ma séance" : "Commencer la séance"));
+}
+// Trop tard pour un bloc : le carnet ne lance pas de séance, il envoie dormir
+function carteDormir(nb) {
+  return h("section", { class: "carte dormir", "aria-labelledby": "titre-plan" },
+    h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, icone("soir"), " C’est l’heure de dormir")),
+    h("p", null, `Il est ${heureFr(new Date())}. Ta séance doit finir à ${fmtHM(finTravailMin())} pour que tu sois au lit à ${fmtHM(heureCoucher())} : il n’y a plus le temps pour un bloc de ${DUREE_BLOC} minutes.`),
+    h("p", { class: "sous" }, "Ferme l’écran, prépare ton sac pour demain et va te coucher. Ce que tu as appris aujourd’hui se fixe pendant le sommeil : une nuit courte, c’est un devoir plus dur."),
+    h("p", { class: "petit" }, `Demain, commence avant ${fmtHM(debutAuPlusTard(nb))} pour faire tes ${pluriel(nb, "bloc")}.`));
 }
 
 /* ---------- RÉVISER ---------- */
@@ -4577,19 +4439,19 @@ function vueReviser() {
     h("div", { class: "pile" }, METHODES.filter((m) => epreuveActive(m.mat)).map((m) => h("button", { class: "btn", type: "button", style: "justify-content:space-between;text-align:left", onclick: () => ouvrirMethode(m) }, h("span", null, m.titre), icone("fleche"))))));
 
   /* Chapitres */
-  const filtres = [["tous", "Tout"], ...Object.values(MATIERES).filter((m) => epreuveActive(m.id)).map((m) => [m.id, m.nom])];
-  if (UI.filtreMat !== "tous" && !epreuveActive(UI.filtreMat)) UI.filtreMat = "tous";
+  const filtres = [["tous", "Tout"], ...Object.values(MATIERES).filter((m) => epreuveActive(m.id) && aDuContenu(m.id)).map((m) => [m.id, m.nom])];
+  if (UI.filtreMat !== "tous" && !(epreuveActive(UI.filtreMat) && aDuContenu(UI.filtreMat))) UI.filtreMat = "tous";
   const liste = h("div", { class: "liste-chap" });
   let groupe = null, n = 0;
   for (const c of CHAPITRES) {
     if (!epreuveActive(c.mat)) continue;
     if (UI.filtreMat !== "tous" && c.mat !== UI.filtreMat) continue;
-    if (UI.seulementDevoir && !c.devoir) continue;
+    if (UI.seulementDevoir && !c.devoir && !c.socle) continue;
     const g = `${MATIERES[c.mat].nom} · ${c.groupe}`;
     if (g !== groupe) { liste.append(h("div", { class: "groupe" }, g)); groupe = g; }
     const st = statsCartesChap(c.id);
     const nx = (EXOS[c.id] || []).length;
-    const infos = [!chapitreVu(c) ? "Pas encore vu en classe" : null, c.verifier ? "À vérifier avec ton cahier" : null, !c.devoir ? "Rappel, hors devoir" : null, `${st.sues}/${st.total} cartes sues`, nx ? pluriel(nx, "exercice corrigé", "exercices corrigés") : null].filter(Boolean).join(" · ");
+    const infos = [!chapitreVu(c) ? "Pas encore vu en classe" : null, c.verifier ? "À vérifier avec ton cahier" : null, c.socle ? "Sert dans tous les exercices" : !c.devoir ? "Rappel, hors devoir" : null, `${st.sues}/${st.total} cartes sues`, nx ? pluriel(nx, "exercice corrigé", "exercices corrigés") : null].filter(Boolean).join(" · ");
     n++;
     liste.append(h("button", { class: "chap", type: "button", onclick: () => ouvrirChapitre(c.id), style: chapitreVu(c) ? null : "opacity:.6" },
       puceMaitrise(maitriseDe(c.id)),
@@ -4616,7 +4478,7 @@ function choisirChapitrePuis(type) {
       const classes = classementChapitres().filter(filtre);
       const autres = CHAPITRES.filter((c) => epreuveActive(c.mat) && filtre(c) && !classes.includes(c));
       const bouton = (c) => h("button", { class: "chap", type: "button", onclick: () => lancer(c.id) }, puceMaitrise(maitriseDe(c.id)),
-        h("span", null, h("span", { class: "t" }, `${MATIERES[c.mat].nom} · ${c.court}`), c.devoir ? null : h("span", { class: "s", style: "display:block" }, "Rappel, hors devoir")), icone("fleche"));
+        h("span", null, h("span", { class: "t" }, `${MATIERES[c.mat].nom} · ${c.court}`), c.devoir ? null : h("span", { class: "s", style: "display:block" }, c.socle ? "Les bases, utiles dans tous les chapitres" : "Rappel, hors devoir")), icone("fleche"));
       f.corps.append(
         ch ? h("button", { class: "btn grand primaire", type: "button", onclick: () => lancer(ch.id) }, `Conseillé ce soir : ${MATIERES[ch.mat].nom} · ${ch.court}`) : null,
         h("p", { class: "petit" }, "Ou choisis (les plus utiles en premier) :"),
@@ -4653,7 +4515,7 @@ function ouvrirChapitre(id) {
       const vu = chapitreVu(c);
       const lancer = (type) => { f.fermer(true); ouvrirActivite(type, type === "cartes" ? { mode: "chap", chap: id } : { chap: id }); };
       vider(f.corps).append(
-        h("div", { class: "puces" }, puceMatiere(c.mat), c.devoir ? h("span", { class: "puce devoir" }, "Au programme du devoir") : h("span", { class: "puce hors" }, "Rappel, hors devoir"),
+        h("div", { class: "puces" }, puceMatiere(c.mat), c.devoir ? h("span", { class: "puce devoir" }, "Au programme du devoir") : c.socle ? h("span", { class: "puce devoir" }, "Les bases : servent dans tout le devoir") : h("span", { class: "puce hors" }, "Rappel, hors devoir"),
           c.verifier ? h("span", { class: "puce verif" }, "À vérifier avec ton cahier") : null),
         h("h3", { style: "font-size:var(--t-l)" }, c.titre),
         c.verifier ? bandeau("alerte", "Ce chapitre vient du programme officiel de PCT de 1ère D. Vérifie dans ton cahier que ton professeur l’a déjà fait. Sinon, coche « Pas encore vu en classe » : le carnet ne te le proposera plus le soir.") : null,
@@ -4784,11 +4646,8 @@ function vueProgres() {
   const ser = series();
   const moy = moyenneGenerale(); const prev = Number(S.config.moyennePrecedente);
   const ses7 = [...S.sessions.values()].filter((s) => s.date >= addDays(auj, -6));
-  const sorties = ses7.reduce((a, s) => a + (s.sorties || 0), 0), decroches = ses7.reduce((a, s) => a + (s.decroches || 0), 0);
   const pauses7 = ses7.flatMap((s) => s.pauses || []), depasse7 = pauses7.filter((x) => x.depasse > 0);
   const blocs7 = ses7.reduce((a, s) => a + ((s.blocs && s.blocs.faits) || 0), 0);
-  const conc = ses7.filter((s) => s.concentration).map((s) => s.concentration);
-  const concMoy = conc.length ? conc.reduce((a, b) => a + b, 0) / conc.length : null;
   const exos7 = [...S.exercices.values()].filter((e) => e.date >= addDays(auj, -6));
   const exosMoy = exos7.length ? exos7.reduce((a, e) => a + (Number(e.note) || 0), 0) / exos7.length : null;
   const pd = prochainDevoir();
@@ -4818,8 +4677,11 @@ function vueProgres() {
     UI.vueTableau ? null : h("div", { class: "legende" },
       h("span", null, h("span", { class: "k", style: "background:var(--barre)" }), `Objectif atteint (${obj} min ce soir)`),
       h("span", null, h("span", { class: "k", style: "background:var(--barre-part)" }), "En dessous")),
-    h("p", { class: "petit" }, `7 derniers jours : ${pluriel(blocs7, "bloc")} de ${DUREE_BLOC} min · ${pluriel(sorties, "sortie")} de l’appli pendant les séances, dont ${pluriel(decroches, "décrochage")}${concMoy ? ` · concentration moyenne ${fmtNote(concMoy)}/5` : ""}.`),
-    pauses7.length ? h("p", { class: "petit" }, depasse7.length ? `Pauses : ${depasse7.length} dépassée${depasse7.length > 1 ? "s" : ""} sur ${pauses7.length}, ${fmtMin(depasse7.reduce((a, x) => a + x.depasse, 0))} perdues en tout.` : `Pauses : ${pauses7.length} sur ${pauses7.length} tenues en 5 min.`) : null));
+    h("p", { class: "petit" }, `7 derniers jours : ${pluriel(blocs7, "bloc")} de ${DUREE_BLOC} min.`),
+    pauses7.length ? h("p", { class: "petit" }, depasse7.length ? `Pauses : ${depasse7.length} dépassée${depasse7.length > 1 ? "s" : ""} sur ${pauses7.length}, soit ${fmtMin(depasse7.reduce((a, x) => a + x.depasse, 0))} de sommeil en moins.` : `Pauses : ${pauses7.length} sur ${pauses7.length} tenues en ${DUREE_PAUSE} min.`) : null));
+
+  /* Sommeil : à quelle heure le travail s’est arrêté, soir après soir */
+  grille.append(carteSommeil());
 
   /* Notes */
   const notes = notesTriees().slice().reverse();
@@ -4842,13 +4704,13 @@ function vueProgres() {
     erreursNonRelues().length ? h("button", { class: "btn", type: "button", onclick: () => ouvrirActivite("erreurs", {}) }, `Relire les ${erreursNonRelues().length} erreurs en attente`) : null));
 
   /* Chapitres */
-  const matsActives = Object.keys(MATIERES).filter(epreuveActive);
+  const matsActives = Object.keys(MATIERES).filter((m) => epreuveActive(m) && aDuContenu(m));
   grille.append(h("section", { class: "carte", "aria-labelledby": "t-chap" },
     h("div", { class: "carte-titre" }, h("h2", { id: "t-chap" }, "Chapitre par chapitre")),
     h("div", { class: "legende" }, [1, 2, 3, 0].map((m) => puceMaitrise(m))),
     ...matsActives.map((mat) => h("div", { class: "pile", style: "gap:6px" },
       h("b", null, MATIERES[mat].long),
-      h("div", { class: "chips-maitrise" }, CHAPITRES.filter((c) => c.mat === mat).map((c) => h("button", { class: `chip-m m${maitriseDe(c.id)}${c.devoir && chapitreVu(c) ? "" : " hors"}`, type: "button", title: c.titre + (c.devoir ? "" : " (rappel, hors devoir)") + (chapitreVu(c) ? "" : " (pas encore vu en classe)"), onclick: () => ouvrirChapitre(c.id) }, h("span", { class: "pt" }), c.court))))),
+      h("div", { class: "chips-maitrise" }, CHAPITRES.filter((c) => c.mat === mat).map((c) => h("button", { class: `chip-m m${maitriseDe(c.id)}${(c.devoir || c.socle) && chapitreVu(c) ? "" : " hors"}`, type: "button", title: c.titre + (c.devoir || c.socle ? "" : " (rappel, hors devoir)") + (chapitreVu(c) ? "" : " (pas encore vu en classe)"), onclick: () => ouvrirChapitre(c.id) }, h("span", { class: "pt" }), c.court))))),
     h("p", { class: "petit" }, "Bordure en pointillés : hors devoir, ou pas encore vu en classe."),
     (() => {
       const q = statsQuiz(CHAPITRES.filter((c) => epreuveActive(c.mat)).map((c) => c.id));
@@ -4869,10 +4731,41 @@ function vueProgres() {
     ses.length ? h("ul", { class: "journal" }, ses.map((s) => h("li", null,
       h("span", { class: "jd" }, fmtDate(s.date)),
       h("span", null, h("span", { class: "jt" }, (s.etapes || []).map((e) => e.resume || TITRES_ACT[e.type]).filter(Boolean).join(" · ") || "Séance"),
-        h("span", { class: "petit", style: "display:block" }, [s.blocs ? `${s.blocs.bonus ? "bonus · " : ""}${s.blocs.faits}/${s.blocs.prevus} bloc${s.blocs.prevus > 1 ? "s" : ""}` : null, s.pauses && s.pauses.length ? (s.pauseDepassee ? `pauses dépassées de ${fmtMin(s.pauseDepassee)}` : "pauses tenues") : null, s.concentration ? `Concentration ${s.concentration}/5` : null, s.sorties ? `${pluriel(s.sorties, "sortie")}` : "aucune sortie", s.decroches ? `${pluriel(s.decroches, "décrochage")}` : null].filter(Boolean).join(" · ")),
+        h("span", { class: "petit", style: "display:block" }, [s.blocs ? `${s.blocs.bonus ? "bonus · " : ""}${s.blocs.faits}/${s.blocs.prevus} bloc${s.blocs.prevus > 1 ? "s" : ""}` : null, s.pauses && s.pauses.length ? (s.pauseDepassee ? `pauses dépassées de ${fmtMin(s.pauseDepassee)}` : "pauses tenues") : null, s.fin ? `fini à ${heureFr(new Date(s.fin))}` : null, s.coupeSommeil ? "arrêtée pour dormir" : null, s.forme ? `forme : ${FORMES[s.forme]}` : null].filter(Boolean).join(" · ")),
         s.commentaire ? h("span", { class: "jc", style: "display:block" }, `« ${s.commentaire} »`) : null),
       h("span", { class: "jm" }, fmtMin(s.minutes))))) : h("div", { class: "vide" }, icone("chrono"), h("p", null, "Aucune séance enregistrée. La première apparaîtra ici dès ce soir."))));
   return out;
+}
+// Les 7 derniers soirs : heure où le travail s’est arrêté, comparée à l’heure limite (coucher − 30 min)
+function carteSommeil() {
+  const auj = todayKey();
+  const parSoir = new Map();
+  for (const s of S.sessions.values()) {
+    if (!s.fin || !s.minutes) continue;
+    const d = soireeDe(s.fin);
+    const p = parSoir.get(d) || { fin: 0, forme: null, coupe: false };
+    if (s.fin > p.fin) { p.fin = s.fin; if (s.forme) p.forme = s.forme; }
+    else if (s.forme && !p.forme) p.forme = s.forme;
+    if (s.coupeSommeil) p.coupe = true;
+    parSoir.set(d, p);
+  }
+  const jours = []; for (let k = 0; k < 7; k++) jours.push(addDays(auj, -k));
+  const avec = jours.filter((d) => parSoir.has(d));
+  const aLHeure = avec.filter((d) => finiAvantLimite(parSoir.get(d).fin)).length;
+  const lim = fmtHM(finTravailMin());
+  return h("section", { class: "carte", "aria-labelledby": "t-sommeil" },
+    h("div", { class: "carte-titre" }, h("h2", { id: "t-sommeil" }, "Sommeil · fin du travail"), h("span", { class: "puce" }, `Au lit à ${fmtHM(heureCoucher())}`)),
+    h("p", { class: "sous" }, `Le travail s’arrête au plus tard à ${lim}, pour 30 minutes sans écran avant de dormir.`),
+    avec.length ? h("ul", { class: "nuits", "aria-label": "Heure de fin du travail, 7 derniers soirs" }, jours.map((d) => {
+      const nom = d === auj ? "Ce soir" : fmtDate(d);
+      const p = parSoir.get(d);
+      if (!p) return h("li", { class: "sans" }, h("span", { class: "jd" }, nom), h("span", { class: "h tnum" }, "—"), h("span", { class: "etat" }, d === auj ? "pas encore" : "pas de séance"));
+      const ok = finiAvantLimite(p.fin);
+      return h("li", null, h("span", { class: "jd" }, nom), h("span", { class: "h tnum" }, heureFr(new Date(p.fin))),
+        h("span", { class: "etat" }, icone(ok ? "coche" : "erreur", ok ? "i-ok" : "i-tard"), ok ? "à l’heure" : "trop tard"),
+        h("span", { class: "forme" }, p.forme ? FORMES[p.forme] : ""));
+    })) : h("div", { class: "vide" }, icone("soir"), h("p", null, "L’heure de fin de chaque séance s’affichera ici, soir après soir.")),
+    avec.length ? h("p", { class: "petit" }, `${aLHeure} soir${aLHeure > 1 ? "s" : ""} sur ${avec.length} fini${aLHeure > 1 ? "s" : ""} à l’heure (avant ${lim}). À droite : la forme notée au bilan.`) : null);
 }
 function moyennesParMatiere() {
   const mats = MATIERES_NOTES().filter(([k]) => [...S.notes.values()].some((n) => n.mat === k));
@@ -5014,6 +4907,7 @@ function vuePlus() {
   out.push(h("section", { class: "carte", "aria-labelledby": "t-profil" }, h("h2", { id: "t-profil", class: "h2" }, "Profil et objectif"),
     ligne("Prénom", c.prenom || "Pas renseigné", formProfil),
     ligne("Séance du soir", `${libelleBlocs(nbBlocsDuJour())} · ${fmtMin(dureeSeance(nbBlocsDuJour()))} avec les pauses`, formRythme),
+    ligne("Heure du coucher", `${fmtHM(heureCoucher())} · travail fini au plus tard à ${fmtHM(finTravailMin())}`, formRythme),
     ligne("Moyenne générale de l’an dernier (2nde)", c.moyennePrecedente ? fmtNote(c.moyennePrecedente) : "—", formProfil),
     ligne("Qui suit ce carnet avec toi", coach(), formProfil)));
 
@@ -5027,7 +4921,7 @@ function vuePlus() {
     h("p", { class: "sous" }, "Décoche une matière pour que le carnet ne te la propose plus (par exemple pendant la semaine où tu n’as pas de devoir dans cette matière)."),
     h("div", null, Object.values(MATIERES).map((m) => h("label", { class: "case" },
       h("input", { type: "checkbox", checked: c.epreuves[m.id] !== false, onchange: (e) => majConfig({ epreuves: Object.assign({}, c.epreuves, { [m.id]: e.target.checked }) }) }),
-      h("span", null, h("b", null, m.long), h("span", { class: "petit", style: "display:block" }, `${CHAPITRES.filter((x) => x.mat === m.id && x.devoir).length} chapitres au devoir · ${Object.entries(EXOS).filter(([id]) => CHAP[id] && CHAP[id].mat === m.id).reduce((a, [, l]) => a + l.length, 0)} exercices corrigés`)))))));
+      h("span", null, h("b", null, m.long), h("span", { class: "petit", style: "display:block" }, aDuContenu(m.id) ? `${CHAPITRES.filter((x) => x.mat === m.id && x.devoir).length} chapitres au devoir · ${Object.entries(EXOS).filter(([id]) => CHAP[id] && CHAP[id].mat === m.id).reduce((a, [, l]) => a + l.length, 0)} exercices corrigés` : "Chapitres en préparation, d’après ton cahier : ils arrivent bientôt. Tu peux déjà noter tes notes et la date du devoir.")))))));
 
   const echeances = DATES_CLES.map((d) => ({ ...d, perso: false })).concat((c.echeances || []).map((e, i) => ({ ...e, perso: true, i }))).sort((a, b) => a.date.localeCompare(b.date));
   out.push(h("section", { class: "carte", "aria-labelledby": "t-dates" }, h("div", { class: "carte-titre" }, h("h2", { id: "t-dates" }, "Autres dates"), h("button", { class: "btn petit-btn", type: "button", onclick: formEcheance }, icone("plus"), "Composition, exposé…")),
@@ -5039,7 +4933,9 @@ function vuePlus() {
   out.push(h("section", { class: "carte", "aria-labelledby": "t-methode" }, h("h2", { id: "t-methode", class: "h2" }, "Comment ça marche"),
     h("ol", { class: "plan" },
       [["soir", "Un rendez-vous fixe", `Chaque soir, des blocs de ${DUREE_BLOC} minutes de travail séparés par ${DUREE_PAUSE} minutes de pause. Le premier bloc est pour les maths, les autres tournent entre les matières. La série compte les soirs où l’objectif est atteint.`],
-       ["chrono", "Le bloc va jusqu’au bout", `Quand une activité est finie avant les ${DUREE_BLOC} minutes, la suivante démarre : fiche, cartes, exercice corrigé, quiz, révision d’un autre chapitre. Les pauses trop longues sont notées.`],
+       ["chrono", "Le bloc va jusqu’au bout", `Quand une activité est finie avant les ${DUREE_BLOC} minutes, la suivante démarre : fiche, cartes, exercice corrigé, quiz, révision d’un autre chapitre.`],
+       ["soir", "Le sommeil d’abord", `La séance finit au plus tard à ${fmtHM(finTravailMin())}, 30 minutes avant ton coucher (${fmtHM(heureCoucher())}). Si tu commences tard, le carnet raccourcit la séance au lieu de te faire veiller : ce que tu apprends se fixe pendant la nuit.`],
+       ["livre", "Les bases en maths", "Le chapitre « Les bases du calcul » (signes, fractions, développer, factoriser, équations) passe en premier : il sert dans tous les exercices du devoir."],
        ["stylo", "S’entraîner comme au devoir", "Les exercices corrigés suivent le format des devoirs de 1ère D : un contexte, une tâche, des questions numérotées. Tu cherches sur ta feuille, puis tu compares avec le corrigé pas à pas."],
        ["cartes", "Se tester plutôt que relire", "Les cartes reviennent après 1, 2, 4, 8 puis 16 jours : la répétition espacée fixe les formules et les définitions."],
        ["courbe", "Le devoir qui approche passe devant", "Le chapitre du soir change selon ton niveau, ta dernière révision et la date du devoir de chaque matière."],
@@ -5075,12 +4971,19 @@ function formProfil() {
 function formRythme() {
   ouvrirFeuille({ titre: "Séance du soir", construire: (f) => {
     let mode = nbBlocsDuJour();
+    let coucher = COUCHERS.includes(S.config.coucher) ? S.config.coucher : "23:00";
+    const debutMax = h("p", { class: "petit" });
+    const majDebut = () => { const fin = Number(coucher.slice(0, 2)) * 60 + Number(coucher.slice(3)) - SAS_SOMMEIL; debutMax.textContent = `Avec ${pluriel(mode, "bloc")} et un coucher à ${fmtHM(fin + SAS_SOMMEIL)}, commence au plus tard à ${fmtHM(fin - dureeSeance(mode))} : fin du travail à ${fmtHM(fin)}.`; };
+    majDebut();
     f.corps.append(
       h("p", null, `Chaque bloc dure ${DUREE_BLOC} minutes, avec ${DUREE_PAUSE} minutes de pause entre deux. Dans un bloc, le carnet enchaîne les activités jusqu’au bout du temps.`),
       h("label", { class: "champ" }, "Nombre de blocs chaque soir", h("span", { class: "aide" }, "Jusqu’au devoir, 3 blocs est un bon rythme. Un soir chargé, mieux vaut 2 blocs faits que 4 abandonnés.")),
-      choixUnique([[2, "2 blocs · 55 min"], [3, "3 blocs · 1 h 25"], [4, "4 blocs · 1 h 55"]], mode, (v) => { mode = Number(v); }),
+      choixUnique([[2, "2 blocs · 55 min"], [3, "3 blocs · 1 h 25"], [4, "4 blocs · 1 h 55"]], mode, (v) => { mode = Number(v); majDebut(); }),
+      h("label", { class: "champ" }, "Heure du coucher", h("span", { class: "aide" }, `Le travail s’arrête ${SAS_SOMMEIL} minutes avant : écran fermé, sac prêt pour le lendemain. Si tu commences trop tard, le carnet raccourcit la séance.`)),
+      choixUnique(COUCHERS.map((c) => [c, fmtHM(Number(c.slice(0, 2)) * 60 + Number(c.slice(3)))]), coucher, (v) => { coucher = v; majDebut(); }),
+      debutMax,
       h("button", { class: "btn grand primaire", type: "button", onclick: () => {
-        majConfig({ rythme: { mode, debut: (S.config.rythme || {}).debut || todayKey() } });
+        majConfig({ rythme: { mode, debut: (S.config.rythme || {}).debut || todayKey() }, coucher });
         f.fermer(true); toast("Enregistré.");
       } }, "Enregistrer"));
   } });

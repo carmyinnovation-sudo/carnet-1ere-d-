@@ -173,22 +173,30 @@ function carteSeance(fait) {
   if (enCours) {
     const ou = enCours.phase === "pause" ? "en pause" : enCours.phase === "bilan" ? "il reste le bilan" : `bloc ${Math.min(enCours.iBloc + 1, enCours.plan.nb)} sur ${enCours.plan.nb}`;
     const b = enCours.plan.blocs[Math.min(enCours.iBloc, enCours.plan.blocs.length - 1)];
+    const tard = enCours.phase !== "bilan" && blocsPossibles(1) === 0;
     return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
       h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, `Séance en cours · ${ou}`)),
       h("p", { class: "sous" }, enCours.phase === "bilan" ? "Tous les blocs sont faits : remplis le bilan pour finir." : `${enCours.msBlocs.length} bloc${enCours.msBlocs.length > 1 ? "s" : ""} fait${enCours.msBlocs.length > 1 ? "s" : ""}. Prochain : ${b.titre} (${CHAP[b.chap].court}).`),
-      h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree({ reprise: lireSeanceEnCours() || enCours }) }, icone("lecture"), "Reprendre la séance"));
+      tard ? bandeau("alerte", `Il est ${heureFr(new Date())} : plus le temps pour un bloc entier avant ${fmtHM(finTravailMin())}. Ouvre la séance pour la terminer, puis va dormir.`) : null,
+      h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree({ reprise: lireSeanceEnCours() || enCours }) }, icone("lecture"), tard ? "Terminer ma séance" : "Reprendre la séance"));
   }
   if (faits >= nb) {
+    const bonusPossible = blocsPossibles(1) > 0;
     return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
       h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, "Séance faite ce soir")),
-      h("p", { class: "sous" }, `${pluriel(faits, "bloc")} sur ${nb} · ${fmtMin(fait)} de travail. Bravo, repose-toi ou fais un bloc de plus.`),
-      h("button", { class: "btn grand", type: "button", onclick: () => lancerSoiree({ bonus: true }) }, icone("lecture"), `Un bloc bonus de ${DUREE_BLOC} min`));
+      h("p", { class: "sous" }, `${pluriel(faits, "bloc")} sur ${nb} · ${fmtMin(fait)} de travail. ` + (bonusPossible ? "Bravo. Repose-toi, ou fais un bloc de plus." : `Bravo. Il est ${heureFr(new Date())} : ferme l’écran et va dormir, au lit à ${fmtHM(heureCoucher())}.`)),
+      bonusPossible ? h("button", { class: "btn grand", type: "button", onclick: () => lancerSoiree({ bonus: true }) }, icone("lecture"), `Un bloc bonus de ${DUREE_BLOC} min`) : null);
   }
   const plan = planSeance(nb);
   if (!plan.blocs.length) {
     return h("section", { class: "carte" }, h("h2", { class: "h2" }, "Rien à réviser"), h("p", { class: "sous" }, "Toutes les matières sont décochées, ou tous les chapitres sont marqués « pas encore vu ». Va dans Plus pour cocher tes matières."));
   }
-  const reste = plan.blocs.slice(Math.min(faits, plan.blocs.length - 1));
+  const debut = Math.min(faits, plan.blocs.length - 1);
+  const restePlan = plan.blocs.slice(debut);
+  const possibles = blocsPossibles(restePlan.length);
+  if (!possibles) return carteDormir(nb);
+  const reste = restePlan.slice(0, possibles);
+  const coupe = possibles < restePlan.length;
   const lignes = [];
   const ICO_ROLE = { sciences: "stylo", lettres: "bulle", langue: "cartes" };
   reste.forEach((b, k) => {
@@ -197,18 +205,30 @@ function carteSeance(fait) {
       h("span", { class: "lbl" }, h("b", null, `${faits + k + 1}. ${b.titre}`), h("span", null, `${CHAP[b.chap].court} · ${ROLES_BLOC[b.role].detail}`)),
       h("span", { class: "min tnum" }, `${DUREE_BLOC} min`)));
   });
+  const finPrevue = new Date(Date.now() + dureeSeance(reste.length) * 60000);
+  const soir = new Date().getHours() >= 18 || new Date().getHours() < 5;
   return h("section", { class: "carte", "aria-labelledby": "titre-plan" },
     h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, faits ? `Il te reste ${pluriel(reste.length, "bloc")}` : `Ta séance de ce soir · ${fmtMin(dureeSeance(reste.length))}`)),
     h("p", { class: "sous" }, rythme),
+    coupe ? bandeau("alerte", h("b", null, `Il est ${heureFr(new Date())}.`), ` Pour finir avant ${fmtHM(finTravailMin())} et être au lit à ${fmtHM(heureCoucher())}, ce soir c’est ${pluriel(possibles, "bloc")} au lieu de ${restePlan.length}. Demain, commence avant ${fmtHM(debutAuPlusTard(nb))} pour faire les ${nb}.`)
+      : soir ? h("p", { class: "petit" }, icone("soir"), ` Si tu commences maintenant : fin vers ${heureFr(finPrevue)}, au lit à ${fmtHM(heureCoucher())}.`) : null,
     h("ol", { class: "plan" }, lignes),
     h("details", { class: "repli" }, h("summary", null, "Changer le programme de ce soir"),
-      h("div", { class: "pile" }, plan.blocs.map((b, k) => k < faits ? null : h("div", { class: "rangee", style: "justify-content:space-between;border-top:1px solid var(--ligne);padding-top:8px" },
+      h("div", { class: "pile" }, plan.blocs.map((b, k) => k < debut || k >= debut + possibles ? null : h("div", { class: "rangee", style: "justify-content:space-between;border-top:1px solid var(--ligne);padding-top:8px" },
         h("span", null, h("b", null, `Bloc ${k + 1} · ${MATIERES[b.mat].nom}`), h("span", { class: "petit", style: "display:block" }, CHAP[b.chap].court)),
         h("span", { class: "rangee" },
           h("button", { class: "btn petit-btn", type: "button", onclick: () => changerChapitreMat(b.mat) }, "Autre chapitre"),
           k > 0 || b.mat !== "maths" ? h("button", { class: "btn petit-btn", type: "button", onclick: () => changerMatiere(k) }, "Autre matière") : null)))),
       h("p", { class: "petit" }, "Le bloc de maths reste chaque soir : c’est la matière qui demande le plus d’entraînement.")),
     h("button", { class: "btn grand primaire", type: "button", onclick: () => lancerSoiree() }, icone("lecture"), faits ? "Continuer ma séance" : "Commencer la séance"));
+}
+// Trop tard pour un bloc : le carnet ne lance pas de séance, il envoie dormir
+function carteDormir(nb) {
+  return h("section", { class: "carte dormir", "aria-labelledby": "titre-plan" },
+    h("div", { class: "carte-titre" }, h("h2", { id: "titre-plan" }, icone("soir"), " C’est l’heure de dormir")),
+    h("p", null, `Il est ${heureFr(new Date())}. Ta séance doit finir à ${fmtHM(finTravailMin())} pour que tu sois au lit à ${fmtHM(heureCoucher())} : il n’y a plus le temps pour un bloc de ${DUREE_BLOC} minutes.`),
+    h("p", { class: "sous" }, "Ferme l’écran, prépare ton sac pour demain et va te coucher. Ce que tu as appris aujourd’hui se fixe pendant le sommeil : une nuit courte, c’est un devoir plus dur."),
+    h("p", { class: "petit" }, `Demain, commence avant ${fmtHM(debutAuPlusTard(nb))} pour faire tes ${pluriel(nb, "bloc")}.`));
 }
 
 /* ---------- RÉVISER ---------- */
@@ -233,19 +253,19 @@ function vueReviser() {
     h("div", { class: "pile" }, METHODES.filter((m) => epreuveActive(m.mat)).map((m) => h("button", { class: "btn", type: "button", style: "justify-content:space-between;text-align:left", onclick: () => ouvrirMethode(m) }, h("span", null, m.titre), icone("fleche"))))));
 
   /* Chapitres */
-  const filtres = [["tous", "Tout"], ...Object.values(MATIERES).filter((m) => epreuveActive(m.id)).map((m) => [m.id, m.nom])];
-  if (UI.filtreMat !== "tous" && !epreuveActive(UI.filtreMat)) UI.filtreMat = "tous";
+  const filtres = [["tous", "Tout"], ...Object.values(MATIERES).filter((m) => epreuveActive(m.id) && aDuContenu(m.id)).map((m) => [m.id, m.nom])];
+  if (UI.filtreMat !== "tous" && !(epreuveActive(UI.filtreMat) && aDuContenu(UI.filtreMat))) UI.filtreMat = "tous";
   const liste = h("div", { class: "liste-chap" });
   let groupe = null, n = 0;
   for (const c of CHAPITRES) {
     if (!epreuveActive(c.mat)) continue;
     if (UI.filtreMat !== "tous" && c.mat !== UI.filtreMat) continue;
-    if (UI.seulementDevoir && !c.devoir) continue;
+    if (UI.seulementDevoir && !c.devoir && !c.socle) continue;
     const g = `${MATIERES[c.mat].nom} · ${c.groupe}`;
     if (g !== groupe) { liste.append(h("div", { class: "groupe" }, g)); groupe = g; }
     const st = statsCartesChap(c.id);
     const nx = (EXOS[c.id] || []).length;
-    const infos = [!chapitreVu(c) ? "Pas encore vu en classe" : null, c.verifier ? "À vérifier avec ton cahier" : null, !c.devoir ? "Rappel, hors devoir" : null, `${st.sues}/${st.total} cartes sues`, nx ? pluriel(nx, "exercice corrigé", "exercices corrigés") : null].filter(Boolean).join(" · ");
+    const infos = [!chapitreVu(c) ? "Pas encore vu en classe" : null, c.verifier ? "À vérifier avec ton cahier" : null, c.socle ? "Sert dans tous les exercices" : !c.devoir ? "Rappel, hors devoir" : null, `${st.sues}/${st.total} cartes sues`, nx ? pluriel(nx, "exercice corrigé", "exercices corrigés") : null].filter(Boolean).join(" · ");
     n++;
     liste.append(h("button", { class: "chap", type: "button", onclick: () => ouvrirChapitre(c.id), style: chapitreVu(c) ? null : "opacity:.6" },
       puceMaitrise(maitriseDe(c.id)),
@@ -272,7 +292,7 @@ function choisirChapitrePuis(type) {
       const classes = classementChapitres().filter(filtre);
       const autres = CHAPITRES.filter((c) => epreuveActive(c.mat) && filtre(c) && !classes.includes(c));
       const bouton = (c) => h("button", { class: "chap", type: "button", onclick: () => lancer(c.id) }, puceMaitrise(maitriseDe(c.id)),
-        h("span", null, h("span", { class: "t" }, `${MATIERES[c.mat].nom} · ${c.court}`), c.devoir ? null : h("span", { class: "s", style: "display:block" }, "Rappel, hors devoir")), icone("fleche"));
+        h("span", null, h("span", { class: "t" }, `${MATIERES[c.mat].nom} · ${c.court}`), c.devoir ? null : h("span", { class: "s", style: "display:block" }, c.socle ? "Les bases, utiles dans tous les chapitres" : "Rappel, hors devoir")), icone("fleche"));
       f.corps.append(
         ch ? h("button", { class: "btn grand primaire", type: "button", onclick: () => lancer(ch.id) }, `Conseillé ce soir : ${MATIERES[ch.mat].nom} · ${ch.court}`) : null,
         h("p", { class: "petit" }, "Ou choisis (les plus utiles en premier) :"),
@@ -309,7 +329,7 @@ function ouvrirChapitre(id) {
       const vu = chapitreVu(c);
       const lancer = (type) => { f.fermer(true); ouvrirActivite(type, type === "cartes" ? { mode: "chap", chap: id } : { chap: id }); };
       vider(f.corps).append(
-        h("div", { class: "puces" }, puceMatiere(c.mat), c.devoir ? h("span", { class: "puce devoir" }, "Au programme du devoir") : h("span", { class: "puce hors" }, "Rappel, hors devoir"),
+        h("div", { class: "puces" }, puceMatiere(c.mat), c.devoir ? h("span", { class: "puce devoir" }, "Au programme du devoir") : c.socle ? h("span", { class: "puce devoir" }, "Les bases : servent dans tout le devoir") : h("span", { class: "puce hors" }, "Rappel, hors devoir"),
           c.verifier ? h("span", { class: "puce verif" }, "À vérifier avec ton cahier") : null),
         h("h3", { style: "font-size:var(--t-l)" }, c.titre),
         c.verifier ? bandeau("alerte", "Ce chapitre vient du programme officiel de PCT de 1ère D. Vérifie dans ton cahier que ton professeur l’a déjà fait. Sinon, coche « Pas encore vu en classe » : le carnet ne te le proposera plus le soir.") : null,
@@ -427,11 +447,8 @@ function vueProgres() {
   const ser = series();
   const moy = moyenneGenerale(); const prev = Number(S.config.moyennePrecedente);
   const ses7 = [...S.sessions.values()].filter((s) => s.date >= addDays(auj, -6));
-  const sorties = ses7.reduce((a, s) => a + (s.sorties || 0), 0), decroches = ses7.reduce((a, s) => a + (s.decroches || 0), 0);
   const pauses7 = ses7.flatMap((s) => s.pauses || []), depasse7 = pauses7.filter((x) => x.depasse > 0);
   const blocs7 = ses7.reduce((a, s) => a + ((s.blocs && s.blocs.faits) || 0), 0);
-  const conc = ses7.filter((s) => s.concentration).map((s) => s.concentration);
-  const concMoy = conc.length ? conc.reduce((a, b) => a + b, 0) / conc.length : null;
   const exos7 = [...S.exercices.values()].filter((e) => e.date >= addDays(auj, -6));
   const exosMoy = exos7.length ? exos7.reduce((a, e) => a + (Number(e.note) || 0), 0) / exos7.length : null;
   const pd = prochainDevoir();
@@ -461,8 +478,11 @@ function vueProgres() {
     UI.vueTableau ? null : h("div", { class: "legende" },
       h("span", null, h("span", { class: "k", style: "background:var(--barre)" }), `Objectif atteint (${obj} min ce soir)`),
       h("span", null, h("span", { class: "k", style: "background:var(--barre-part)" }), "En dessous")),
-    h("p", { class: "petit" }, `7 derniers jours : ${pluriel(blocs7, "bloc")} de ${DUREE_BLOC} min · ${pluriel(sorties, "sortie")} de l’appli pendant les séances, dont ${pluriel(decroches, "décrochage")}${concMoy ? ` · concentration moyenne ${fmtNote(concMoy)}/5` : ""}.`),
-    pauses7.length ? h("p", { class: "petit" }, depasse7.length ? `Pauses : ${depasse7.length} dépassée${depasse7.length > 1 ? "s" : ""} sur ${pauses7.length}, ${fmtMin(depasse7.reduce((a, x) => a + x.depasse, 0))} perdues en tout.` : `Pauses : ${pauses7.length} sur ${pauses7.length} tenues en 5 min.`) : null));
+    h("p", { class: "petit" }, `7 derniers jours : ${pluriel(blocs7, "bloc")} de ${DUREE_BLOC} min.`),
+    pauses7.length ? h("p", { class: "petit" }, depasse7.length ? `Pauses : ${depasse7.length} dépassée${depasse7.length > 1 ? "s" : ""} sur ${pauses7.length}, soit ${fmtMin(depasse7.reduce((a, x) => a + x.depasse, 0))} de sommeil en moins.` : `Pauses : ${pauses7.length} sur ${pauses7.length} tenues en ${DUREE_PAUSE} min.`) : null));
+
+  /* Sommeil : à quelle heure le travail s’est arrêté, soir après soir */
+  grille.append(carteSommeil());
 
   /* Notes */
   const notes = notesTriees().slice().reverse();
@@ -485,13 +505,13 @@ function vueProgres() {
     erreursNonRelues().length ? h("button", { class: "btn", type: "button", onclick: () => ouvrirActivite("erreurs", {}) }, `Relire les ${erreursNonRelues().length} erreurs en attente`) : null));
 
   /* Chapitres */
-  const matsActives = Object.keys(MATIERES).filter(epreuveActive);
+  const matsActives = Object.keys(MATIERES).filter((m) => epreuveActive(m) && aDuContenu(m));
   grille.append(h("section", { class: "carte", "aria-labelledby": "t-chap" },
     h("div", { class: "carte-titre" }, h("h2", { id: "t-chap" }, "Chapitre par chapitre")),
     h("div", { class: "legende" }, [1, 2, 3, 0].map((m) => puceMaitrise(m))),
     ...matsActives.map((mat) => h("div", { class: "pile", style: "gap:6px" },
       h("b", null, MATIERES[mat].long),
-      h("div", { class: "chips-maitrise" }, CHAPITRES.filter((c) => c.mat === mat).map((c) => h("button", { class: `chip-m m${maitriseDe(c.id)}${c.devoir && chapitreVu(c) ? "" : " hors"}`, type: "button", title: c.titre + (c.devoir ? "" : " (rappel, hors devoir)") + (chapitreVu(c) ? "" : " (pas encore vu en classe)"), onclick: () => ouvrirChapitre(c.id) }, h("span", { class: "pt" }), c.court))))),
+      h("div", { class: "chips-maitrise" }, CHAPITRES.filter((c) => c.mat === mat).map((c) => h("button", { class: `chip-m m${maitriseDe(c.id)}${(c.devoir || c.socle) && chapitreVu(c) ? "" : " hors"}`, type: "button", title: c.titre + (c.devoir || c.socle ? "" : " (rappel, hors devoir)") + (chapitreVu(c) ? "" : " (pas encore vu en classe)"), onclick: () => ouvrirChapitre(c.id) }, h("span", { class: "pt" }), c.court))))),
     h("p", { class: "petit" }, "Bordure en pointillés : hors devoir, ou pas encore vu en classe."),
     (() => {
       const q = statsQuiz(CHAPITRES.filter((c) => epreuveActive(c.mat)).map((c) => c.id));
@@ -512,10 +532,41 @@ function vueProgres() {
     ses.length ? h("ul", { class: "journal" }, ses.map((s) => h("li", null,
       h("span", { class: "jd" }, fmtDate(s.date)),
       h("span", null, h("span", { class: "jt" }, (s.etapes || []).map((e) => e.resume || TITRES_ACT[e.type]).filter(Boolean).join(" · ") || "Séance"),
-        h("span", { class: "petit", style: "display:block" }, [s.blocs ? `${s.blocs.bonus ? "bonus · " : ""}${s.blocs.faits}/${s.blocs.prevus} bloc${s.blocs.prevus > 1 ? "s" : ""}` : null, s.pauses && s.pauses.length ? (s.pauseDepassee ? `pauses dépassées de ${fmtMin(s.pauseDepassee)}` : "pauses tenues") : null, s.concentration ? `Concentration ${s.concentration}/5` : null, s.sorties ? `${pluriel(s.sorties, "sortie")}` : "aucune sortie", s.decroches ? `${pluriel(s.decroches, "décrochage")}` : null].filter(Boolean).join(" · ")),
+        h("span", { class: "petit", style: "display:block" }, [s.blocs ? `${s.blocs.bonus ? "bonus · " : ""}${s.blocs.faits}/${s.blocs.prevus} bloc${s.blocs.prevus > 1 ? "s" : ""}` : null, s.pauses && s.pauses.length ? (s.pauseDepassee ? `pauses dépassées de ${fmtMin(s.pauseDepassee)}` : "pauses tenues") : null, s.fin ? `fini à ${heureFr(new Date(s.fin))}` : null, s.coupeSommeil ? "arrêtée pour dormir" : null, s.forme ? `forme : ${FORMES[s.forme]}` : null].filter(Boolean).join(" · ")),
         s.commentaire ? h("span", { class: "jc", style: "display:block" }, `« ${s.commentaire} »`) : null),
       h("span", { class: "jm" }, fmtMin(s.minutes))))) : h("div", { class: "vide" }, icone("chrono"), h("p", null, "Aucune séance enregistrée. La première apparaîtra ici dès ce soir."))));
   return out;
+}
+// Les 7 derniers soirs : heure où le travail s’est arrêté, comparée à l’heure limite (coucher − 30 min)
+function carteSommeil() {
+  const auj = todayKey();
+  const parSoir = new Map();
+  for (const s of S.sessions.values()) {
+    if (!s.fin || !s.minutes) continue;
+    const d = soireeDe(s.fin);
+    const p = parSoir.get(d) || { fin: 0, forme: null, coupe: false };
+    if (s.fin > p.fin) { p.fin = s.fin; if (s.forme) p.forme = s.forme; }
+    else if (s.forme && !p.forme) p.forme = s.forme;
+    if (s.coupeSommeil) p.coupe = true;
+    parSoir.set(d, p);
+  }
+  const jours = []; for (let k = 0; k < 7; k++) jours.push(addDays(auj, -k));
+  const avec = jours.filter((d) => parSoir.has(d));
+  const aLHeure = avec.filter((d) => finiAvantLimite(parSoir.get(d).fin)).length;
+  const lim = fmtHM(finTravailMin());
+  return h("section", { class: "carte", "aria-labelledby": "t-sommeil" },
+    h("div", { class: "carte-titre" }, h("h2", { id: "t-sommeil" }, "Sommeil · fin du travail"), h("span", { class: "puce" }, `Au lit à ${fmtHM(heureCoucher())}`)),
+    h("p", { class: "sous" }, `Le travail s’arrête au plus tard à ${lim}, pour 30 minutes sans écran avant de dormir.`),
+    avec.length ? h("ul", { class: "nuits", "aria-label": "Heure de fin du travail, 7 derniers soirs" }, jours.map((d) => {
+      const nom = d === auj ? "Ce soir" : fmtDate(d);
+      const p = parSoir.get(d);
+      if (!p) return h("li", { class: "sans" }, h("span", { class: "jd" }, nom), h("span", { class: "h tnum" }, "—"), h("span", { class: "etat" }, d === auj ? "pas encore" : "pas de séance"));
+      const ok = finiAvantLimite(p.fin);
+      return h("li", null, h("span", { class: "jd" }, nom), h("span", { class: "h tnum" }, heureFr(new Date(p.fin))),
+        h("span", { class: "etat" }, icone(ok ? "coche" : "erreur", ok ? "i-ok" : "i-tard"), ok ? "à l’heure" : "trop tard"),
+        h("span", { class: "forme" }, p.forme ? FORMES[p.forme] : ""));
+    })) : h("div", { class: "vide" }, icone("soir"), h("p", null, "L’heure de fin de chaque séance s’affichera ici, soir après soir.")),
+    avec.length ? h("p", { class: "petit" }, `${aLHeure} soir${aLHeure > 1 ? "s" : ""} sur ${avec.length} fini${aLHeure > 1 ? "s" : ""} à l’heure (avant ${lim}). À droite : la forme notée au bilan.`) : null);
 }
 //@@COPIE function moyennesParMatiere() {@@function tableauMinutes() {
 function tableauMinutes() {
@@ -615,6 +666,7 @@ function vuePlus() {
   out.push(h("section", { class: "carte", "aria-labelledby": "t-profil" }, h("h2", { id: "t-profil", class: "h2" }, "Profil et objectif"),
     ligne("Prénom", c.prenom || "Pas renseigné", formProfil),
     ligne("Séance du soir", `${libelleBlocs(nbBlocsDuJour())} · ${fmtMin(dureeSeance(nbBlocsDuJour()))} avec les pauses`, formRythme),
+    ligne("Heure du coucher", `${fmtHM(heureCoucher())} · travail fini au plus tard à ${fmtHM(finTravailMin())}`, formRythme),
     ligne("Moyenne générale de l’an dernier (2nde)", c.moyennePrecedente ? fmtNote(c.moyennePrecedente) : "—", formProfil),
     ligne("Qui suit ce carnet avec toi", coach(), formProfil)));
 
@@ -628,7 +680,7 @@ function vuePlus() {
     h("p", { class: "sous" }, "Décoche une matière pour que le carnet ne te la propose plus (par exemple pendant la semaine où tu n’as pas de devoir dans cette matière)."),
     h("div", null, Object.values(MATIERES).map((m) => h("label", { class: "case" },
       h("input", { type: "checkbox", checked: c.epreuves[m.id] !== false, onchange: (e) => majConfig({ epreuves: Object.assign({}, c.epreuves, { [m.id]: e.target.checked }) }) }),
-      h("span", null, h("b", null, m.long), h("span", { class: "petit", style: "display:block" }, `${CHAPITRES.filter((x) => x.mat === m.id && x.devoir).length} chapitres au devoir · ${Object.entries(EXOS).filter(([id]) => CHAP[id] && CHAP[id].mat === m.id).reduce((a, [, l]) => a + l.length, 0)} exercices corrigés`)))))));
+      h("span", null, h("b", null, m.long), h("span", { class: "petit", style: "display:block" }, aDuContenu(m.id) ? `${CHAPITRES.filter((x) => x.mat === m.id && x.devoir).length} chapitres au devoir · ${Object.entries(EXOS).filter(([id]) => CHAP[id] && CHAP[id].mat === m.id).reduce((a, [, l]) => a + l.length, 0)} exercices corrigés` : "Chapitres en préparation, d’après ton cahier : ils arrivent bientôt. Tu peux déjà noter tes notes et la date du devoir.")))))));
 
   const echeances = DATES_CLES.map((d) => ({ ...d, perso: false })).concat((c.echeances || []).map((e, i) => ({ ...e, perso: true, i }))).sort((a, b) => a.date.localeCompare(b.date));
   out.push(h("section", { class: "carte", "aria-labelledby": "t-dates" }, h("div", { class: "carte-titre" }, h("h2", { id: "t-dates" }, "Autres dates"), h("button", { class: "btn petit-btn", type: "button", onclick: formEcheance }, icone("plus"), "Composition, exposé…")),
@@ -640,7 +692,9 @@ function vuePlus() {
   out.push(h("section", { class: "carte", "aria-labelledby": "t-methode" }, h("h2", { id: "t-methode", class: "h2" }, "Comment ça marche"),
     h("ol", { class: "plan" },
       [["soir", "Un rendez-vous fixe", `Chaque soir, des blocs de ${DUREE_BLOC} minutes de travail séparés par ${DUREE_PAUSE} minutes de pause. Le premier bloc est pour les maths, les autres tournent entre les matières. La série compte les soirs où l’objectif est atteint.`],
-       ["chrono", "Le bloc va jusqu’au bout", `Quand une activité est finie avant les ${DUREE_BLOC} minutes, la suivante démarre : fiche, cartes, exercice corrigé, quiz, révision d’un autre chapitre. Les pauses trop longues sont notées.`],
+       ["chrono", "Le bloc va jusqu’au bout", `Quand une activité est finie avant les ${DUREE_BLOC} minutes, la suivante démarre : fiche, cartes, exercice corrigé, quiz, révision d’un autre chapitre.`],
+       ["soir", "Le sommeil d’abord", `La séance finit au plus tard à ${fmtHM(finTravailMin())}, 30 minutes avant ton coucher (${fmtHM(heureCoucher())}). Si tu commences tard, le carnet raccourcit la séance au lieu de te faire veiller : ce que tu apprends se fixe pendant la nuit.`],
+       ["livre", "Les bases en maths", "Le chapitre « Les bases du calcul » (signes, fractions, développer, factoriser, équations) passe en premier : il sert dans tous les exercices du devoir."],
        ["stylo", "S’entraîner comme au devoir", "Les exercices corrigés suivent le format des devoirs de 1ère D : un contexte, une tâche, des questions numérotées. Tu cherches sur ta feuille, puis tu compares avec le corrigé pas à pas."],
        ["cartes", "Se tester plutôt que relire", "Les cartes reviennent après 1, 2, 4, 8 puis 16 jours : la répétition espacée fixe les formules et les définitions."],
        ["courbe", "Le devoir qui approche passe devant", "Le chapitre du soir change selon ton niveau, ta dernière révision et la date du devoir de chaque matière."],
@@ -676,12 +730,19 @@ function formProfil() {
 function formRythme() {
   ouvrirFeuille({ titre: "Séance du soir", construire: (f) => {
     let mode = nbBlocsDuJour();
+    let coucher = COUCHERS.includes(S.config.coucher) ? S.config.coucher : "23:00";
+    const debutMax = h("p", { class: "petit" });
+    const majDebut = () => { const fin = Number(coucher.slice(0, 2)) * 60 + Number(coucher.slice(3)) - SAS_SOMMEIL; debutMax.textContent = `Avec ${pluriel(mode, "bloc")} et un coucher à ${fmtHM(fin + SAS_SOMMEIL)}, commence au plus tard à ${fmtHM(fin - dureeSeance(mode))} : fin du travail à ${fmtHM(fin)}.`; };
+    majDebut();
     f.corps.append(
       h("p", null, `Chaque bloc dure ${DUREE_BLOC} minutes, avec ${DUREE_PAUSE} minutes de pause entre deux. Dans un bloc, le carnet enchaîne les activités jusqu’au bout du temps.`),
       h("label", { class: "champ" }, "Nombre de blocs chaque soir", h("span", { class: "aide" }, "Jusqu’au devoir, 3 blocs est un bon rythme. Un soir chargé, mieux vaut 2 blocs faits que 4 abandonnés.")),
-      choixUnique([[2, "2 blocs · 55 min"], [3, "3 blocs · 1 h 25"], [4, "4 blocs · 1 h 55"]], mode, (v) => { mode = Number(v); }),
+      choixUnique([[2, "2 blocs · 55 min"], [3, "3 blocs · 1 h 25"], [4, "4 blocs · 1 h 55"]], mode, (v) => { mode = Number(v); majDebut(); }),
+      h("label", { class: "champ" }, "Heure du coucher", h("span", { class: "aide" }, `Le travail s’arrête ${SAS_SOMMEIL} minutes avant : écran fermé, sac prêt pour le lendemain. Si tu commences trop tard, le carnet raccourcit la séance.`)),
+      choixUnique(COUCHERS.map((c) => [c, fmtHM(Number(c.slice(0, 2)) * 60 + Number(c.slice(3)))]), coucher, (v) => { coucher = v; majDebut(); }),
+      debutMax,
       h("button", { class: "btn grand primaire", type: "button", onclick: () => {
-        majConfig({ rythme: { mode, debut: (S.config.rythme || {}).debut || todayKey() } });
+        majConfig({ rythme: { mode, debut: (S.config.rythme || {}).debut || todayKey() }, coucher });
         f.fermer(true); toast("Enregistré.");
       } }, "Enregistrer"));
   } });

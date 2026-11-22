@@ -13,7 +13,3 @@ Web app de révision pour une élève de Première D (programme du Bénin), à i
 - La clé Supabase présente dans le code est la clé publique du projet : elle ne donne accès à rien sans cette clé secrète.
 
 Programme : chapitres relevés dans les cahiers de l'élève (2e devoir du 1er trimestre, lundi 30 novembre 2026). Pour la PCT, chapitres du début du programme officiel de 1ère D, à vérifier.
-
-## Sources
-
-Les fichiers qui servent à construire le site sont dans `source/` (voir `source/README.md`).

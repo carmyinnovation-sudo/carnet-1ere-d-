@@ -56,3 +56,23 @@ ol.support li.vide::before { content: ""; }
 .pret .val { font-size: var(--t-xs); color: var(--encre-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .dates-devoirs { display: grid; grid-template-columns: 1fr; gap: 10px; }
 @media (min-width: 560px) { .dates-devoirs { grid-template-columns: 1fr 1fr; } }
+/* Sommeil : fin du travail, soir après soir */
+ul.nuits { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ul.nuits li { display: grid; grid-template-columns: minmax(78px, 1.1fr) 64px 1.3fr minmax(0, 1fr); gap: 8px; align-items: center; padding: 8px 0; border-top: 1px solid var(--ligne); font-size: var(--t-s); }
+ul.nuits li:first-child { border-top: 0; }
+ul.nuits .jd { color: var(--encre-2); font-size: var(--t-xs); }
+ul.nuits .h { font-weight: 700; font-variant-numeric: tabular-nums; }
+ul.nuits .etat { display: inline-flex; align-items: center; gap: 5px; }
+ul.nuits .forme { color: var(--encre-2); font-size: var(--t-xs); text-align: right; }
+ul.nuits li.sans { color: var(--encre-3); }
+ul.nuits li.sans .h { font-weight: 400; }
+ul.nuits li.sans .etat { grid-column: 3 / 5; }
+ul.nuits .etat svg { width: 16px; height: 16px; flex: none; }
+.i-ok { color: var(--vert); }
+.i-tard { color: var(--rouge); }
+.carte.dormir h2 { display: inline-flex; align-items: center; gap: 8px; }
+.carte.dormir h2 > span { color: var(--bic); }
+.carte.dormir h2 svg { width: 22px; height: 22px; }
+p.petit > span > svg, p.sous > span > svg { width: 1.15em; height: 1.15em; vertical-align: -0.2em; }
+/* Un élément masqué reste masqué, même si sa classe lui donne un display */
+[hidden] { display: none !important; }

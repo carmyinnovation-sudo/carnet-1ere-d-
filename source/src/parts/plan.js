@@ -31,7 +31,7 @@ function classementChapitres() {
     const depuis = der ? daysBetween(der, auj) : 28;
     const recence = Math.min(depuis, 21) / 7 + 0.3;
     const alterne = derMat === c.mat ? 0.7 : 1;
-    const pertinence = c.devoir ? 1 : 0.3;
+    const pertinence = c.devoir || c.socle ? 1 : 0.3;
     return { c, score: besoin * poidsMatiere(c.mat) * pertinence * recence * alterne };
   }).sort((a, b) => b.score - a.score).map((x) => x.c);
 }
@@ -74,6 +74,41 @@ function blocsFaitsDuJour(d) {
   return n;
 }
 
+/* ---------- Le sommeil d’abord ----------
+   Couchée vers 23 h, cours à 7 h : la séance finit 30 min avant le coucher
+   (écran fermé, sac prêt). Si elle commence tard, le carnet raccourcit la séance
+   au lieu de la faire veiller. L’heure du coucher se règle dans Plus. */
+const SAS_SOMMEIL = 30;
+const COUCHERS = ["21:30", "22:00", "22:30", "23:00", "23:30"];
+function heureCoucher() {
+  const m = /^(\d{2}):(\d{2})$/.exec(S.config.coucher || "");
+  return m ? Number(m[1]) * 60 + Number(m[2]) : 23 * 60;
+}
+const finTravailMin = () => heureCoucher() - SAS_SOMMEIL;
+const fmtHM = (m) => `${Math.floor(m / 60)} h${m % 60 ? " " + String(m % 60).padStart(2, "0") : ""}`;
+// Heure limite de la soirée qui contient ts. Avant 5 h du matin, c’est encore la soirée de la veille.
+function limiteDuSoir(ts) {
+  const d = new Date(ts == null ? Date.now() : ts);
+  if (d.getHours() < 5) d.setDate(d.getDate() - 1);
+  d.setHours(0, 0, 0, 0);
+  return d.getTime() + finTravailMin() * 60000;
+}
+// 2 minutes de tolérance : commencer à 21 h 36 au lieu de 21 h 35 ne doit pas faire sauter un bloc
+const MARGE_SOMMEIL = 2;
+const finiAvantLimite = (ts) => ts <= limiteDuSoir(ts) + MARGE_SOMMEIL * 60000;
+// Combien de blocs (au plus `voulus`) peuvent finir avant l’heure limite, en commençant maintenant
+function blocsPossibles(voulus) {
+  const t = Date.now();
+  const lim = limiteDuSoir(t) + MARGE_SOMMEIL * 60000;   // avant 5 h du matin : limite de la veille, déjà passée
+  let k = voulus;
+  while (k > 0 && t + dureeSeance(k) * 60000 > lim) k--;
+  return k;
+}
+const debutAuPlusTard = (nb) => finTravailMin() - dureeSeance(nb);
+// La soirée d’une séance : une séance finie à 0 h 40 compte pour la veille
+const soireeDe = (ts) => dateKey(new Date(ts - 5 * 3600000));
+const FORMES = { 1: "épuisée", 2: "fatiguée", 3: "ça va", 4: "en forme" };
+
 const classementMat = (mat) => classementChapitres().filter((c) => c.mat === mat);
 function lireMemoChap() {
   let memo = null;
@@ -104,6 +139,8 @@ const ROLES_BLOC = {
   langue: { nom: "Vocabulaire et grammaire", detail: "cartes, quiz, exercice corrigé" }
 };
 const matieresActives = () => Object.keys(MATIERES).filter((m) => epreuveActive(m) && CHAPITRES.some((c) => c.mat === m && chapitreActif(c)));
+// Une matière sans chapitre (la PCT, en attente du cahier) n’apparaît ni dans les révisions ni dans le suivi des chapitres
+const aDuContenu = (m) => CHAPITRES.some((c) => c.mat === m);
 function matieresDuSoir(nb) {
   const auj = todayKey();
   const actives = matieresActives();

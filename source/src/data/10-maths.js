@@ -1,7 +1,9 @@
 /* ---------------- MATHÉMATIQUES · 1ère D ----------------
    SA1 Configuration de l’espace · SA2 Organisation des données
    (relevé du cahier : droites orthogonales, droite et plans orthogonaux, plans perpendiculaires,
-   projections orthogonales, vecteurs de l’espace ; équations et inéquations dans ℝ, systèmes linéaires, dénombrement) */
+   projections orthogonales, vecteurs de l’espace ; équations et inéquations dans ℝ, systèmes linéaires, dénombrement)
+   + « Les bases du calcul » (demandé par Will : maths très faibles) : signes, fractions, racines,
+   développer, factoriser, équations du 1er degré. Rangé en premier : c’est le premier bloc de maths proposé. */
 const FIGURES = {
   cube: {
     titre: "Cube ABCDEFGH", w: 270, h: 222, legende: "ABCD : face du dessous · EFGH : face du dessus",
@@ -31,6 +33,17 @@ METHODES.push(
       ["Gère le temps", "3 heures pour 3 problèmes : environ 1 heure chacun. Bloquée plus de 10 minutes ? Passe et reviens."]
     ],
     pieges: ["Rester bloquée sur une question et ne pas traiter la suite", "Oublier les cas particuliers (a = 0 dans une équation à paramètre)", "Confondre arrangement (l’ordre compte) et combinaison (l’ordre ne compte pas)", "Oublier de conclure par une phrase"] },
+  { id: "m-ma-calcul", mat: "maths", titre: "Maths : les réflexes de calcul",
+    intro: "Au devoir, beaucoup de points se perdent sur des **erreurs de calcul**, pas de cours : un signe, une fraction, un carré. Six réflexes suffisent à en éviter la plupart.",
+    etapes: [
+      ["Des parenthèses autour des négatifs", "Quand tu remplaces b par −3, écris (−3) : b^{2} = (−3)^{2} = 9. Et −4ac avec a = 2, c = −2 : −4 × 2 × (−2) = +16."],
+      ["Une étape par ligne", "N’enchaîne pas trois calculs de tête : écris chaque étape. Une erreur se voit tout de suite, et le correcteur donne des points à la méthode."],
+      ["Le moins devant une parenthèse", "Il change tous les signes : −(x − 3) = −x + 3 et −2(x − 4) = −2x + 8."],
+      ["Simplifie avant de calculer", "Avant de multiplier de grands nombres, simplifie la fraction : @frac{5 × 4 × 3}{3 × 2 × 1} = 5 × 2 = 10."],
+      ["Vérifie en remplaçant", "Une solution d’équation se vérifie en 30 secondes : remplace x dans l’équation de départ. Une factorisation se vérifie en redéveloppant."],
+      ["Le bon sens", "Un prix ou une longueur négatifs, un nombre de façons à virgule : il y a une erreur, cherche-la."]
+    ],
+    pieges: ["−3^{2} = −9 mais (−3)^{2} = 9", "(a + b)^{2} n’est pas a^{2} + b^{2} : il manque le double produit 2ab", "@sqrt{a + b} n’est pas @sqrt{a} + @sqrt{b}", "Additionner les dénominateurs : @frac{1}{2} + @frac{1}{3} n’est pas @frac{2}{5}, c’est @frac{5}{6}"] },
   { id: "m-ma-espace", mat: "maths", titre: "Maths : démontrer une orthogonalité dans l’espace",
     intro: "Presque toutes les questions de géométrie dans l’espace se ramènent à **trois théorèmes**. Le travail : trouver les bonnes droites, puis justifier chaque petite orthogonalité.",
     etapes: [
@@ -54,6 +67,41 @@ METHODES.push(
 );
 
 CHAPITRES.push(
+  /* ---------------- Les bases (avant les chapitres du devoir) ---------------- */
+  { id: "ma-bases", mat: "maths", groupe: "Les bases · utiles dans tous les chapitres", devoir: false, socle: true, court: "Les bases du calcul",
+    titre: "Les bases : signes, fractions, puissances et racines, développer, factoriser, équations du 1er degré",
+    fiche: [
+      "**Pourquoi ce chapitre ?** Au devoir, beaucoup de points se perdent sur des erreurs de calcul, pas de cours : un signe, une fraction, un carré. Ces règles servent partout : discriminant, systèmes, dénombrement, vecteurs.",
+      "**Les signes** : deux signes pareils donnent +, deux signes différents donnent −. (−2) × (−5) = 10 ; (−2) × 5 = −10. Un moins devant une parenthèse change tous les signes : −(x − 3) = −x + 3.",
+      "**Le carré d’un nombre négatif est positif** : (−3)^{2} = 9. Mais −3^{2} = −9, car le carré ne porte que sur le 3. Dans Δ = b^{2} − 4ac avec b = −3, écris b^{2} = (−3)^{2} = 9, toujours avec des parenthèses.",
+      "**Les priorités** : d’abord les parenthèses, puis les puissances, puis × et ÷, enfin + et −. 2 + 3 × 4 = 2 + 12 = 14 (et pas 20).",
+      "**Fractions** : pour additionner, mets d’abord au même dénominateur : @frac{2}{3} + @frac{1}{4} = @frac{8}{12} + @frac{3}{12} = @frac{11}{12}. Pour multiplier : haut × haut et bas × bas. Diviser par @frac{c}{d}, c’est multiplier par @frac{d}{c}. Pour simplifier, divise le haut et le bas par le même nombre : @frac{12}{18} = @frac{2}{3}.",
+      "**Puissances** : a^{n} × a^{p} = a^{n + p} ; (a^{n})^{p} = a^{n × p} ; a^{0} = 1. Une puissance impaire d’un négatif est négative : (−2)^{3} = −8.",
+      "**Racines carrées** (a et b positifs) : @sqrt{a} × @sqrt{b} = @sqrt{ab} et (@sqrt{a})^{2} = a. Pour simplifier, cherche un carré dedans : @sqrt{48} = @sqrt{16 × 3} = 4@sqrt{3}. Attention : @sqrt{a + b} n’est pas @sqrt{a} + @sqrt{b} (@sqrt{9 + 16} = 5, pas 7).",
+      "**Développer** : k(a + b) = ka + kb ; (a + b)(c + d) = ac + ad + bc + bd. Chaque terme de la 1re parenthèse multiplie chaque terme de la 2e.",
+      "**Les trois identités remarquables** : (a + b)^{2} = a^{2} + 2ab + b^{2} ; (a − b)^{2} = a^{2} − 2ab + b^{2} ; (a + b)(a − b) = a^{2} − b^{2}.",
+      "**Factoriser**, c’est l’inverse de développer. 1) Cherche un facteur commun : 3x^{2} − 6x = 3x(x − 2). 2) Sinon, reconnais une identité : x^{2} − 9 = (x − 3)(x + 3) ; x^{2} + 6x + 9 = (x + 3)^{2}. Vérifie toujours en redéveloppant.",
+      "**Équation du 1er degré** : on isole x. Ce qui est ajouté passe de l’autre côté en retranchant, ce qui multiplie passe en divisant : 3x − 7 = 2 ⇔ 3x = 9 ⇔ x = 3. Si a ≠ 0, ax + b = 0 ⇔ x = @frac{−b}{a}. Vérifie en remplaçant : 3 × 3 − 7 = 2 ✔.",
+      "**Équation produit nul** : A × B = 0 ⇔ A = 0 ou B = 0. (x − 2)(2x + 1) = 0 ⇔ x = 2 ou x = −@frac{1}{2}. C’est pour ça qu’on factorise avant de résoudre."
+    ],
+    cartes: [
+      ["(−3)^{2} et −3^{2} : combien ?", "(−3)^{2} = 9 : le carré d’un négatif est positif. −3^{2} = −9 : le carré ne porte que sur le 3."],
+      ["Règle des signes pour un produit", "Signes pareils → résultat positif. Signes différents → résultat négatif. (−2) × (−5) = 10."],
+      ["Que devient −(2x − 5) ?", "−2x + 5 : un moins devant une parenthèse change tous les signes."],
+      ["Additionner @frac{2}{3} + @frac{1}{4}", "Même dénominateur d’abord : @frac{8}{12} + @frac{3}{12} = @frac{11}{12}."],
+      ["Diviser par une fraction", "C’est multiplier par son inverse : @frac{a}{b} ÷ @frac{c}{d} = @frac{a}{b} × @frac{d}{c}."],
+      ["Simplifier @sqrt{50}", "@sqrt{25 × 2} = 5@sqrt{2}."],
+      ["@sqrt{a + b} = @sqrt{a} + @sqrt{b} ?", "Non ! @sqrt{9 + 16} = @sqrt{25} = 5, alors que @sqrt{9} + @sqrt{16} = 7."],
+      ["(a + b)^{2} = …", "a^{2} + 2ab + b^{2} (n’oublie pas le double produit 2ab)."],
+      ["(a − b)^{2} = …", "a^{2} − 2ab + b^{2}."],
+      ["(a + b)(a − b) = …", "a^{2} − b^{2}."],
+      ["Factoriser x^{2} − 25", "(x − 5)(x + 5), car a^{2} − b^{2} = (a − b)(a + b)."],
+      ["Factoriser 4x^{2} − 8x", "4x(x − 2) : 4x est le facteur commun. Vérifie : 4x × x − 4x × 2 = 4x^{2} − 8x."],
+      ["Résoudre ax + b = 0 (avec a ≠ 0)", "x = @frac{−b}{a}. Exemple : 2x + 6 = 0 ⇔ x = −3."],
+      ["Équation produit nul", "A × B = 0 ⇔ A = 0 ou B = 0."],
+      ["Comment vérifier une solution d’équation ?", "Remplace x par la valeur trouvée dans l’équation de départ : les deux côtés doivent être égaux."]
+    ],
+    sujets: [] },
   /* ---------------- SA1 · Configuration de l’espace ---------------- */
   { id: "ma-ortho", mat: "maths", groupe: "SA1 · Configuration de l’espace", devoir: true, court: "Orthogonalité dans l’espace",
     titre: "Droites orthogonales, droite et plan orthogonaux, plans perpendiculaires",
@@ -217,6 +265,25 @@ CHAPITRES.push(
 );
 
 Object.assign(QUIZ, {
+  "ma-bases": [
+    { t: "v", q: "Calcule (−4)^{2} − 4 × 1 × (−5).", r: 36, p: [-4, 4, -36], e: "(−4)^{2} = 16 et −4 × 1 × (−5) = +20, donc 16 + 20 = 36. C’est le Δ de x^{2} − 4x − 5." },
+    { t: "v", q: "Combien vaut −3^{2} ?", r: -9, p: [9, -6, 6], e: "Le carré ne porte que sur le 3 : −(3 × 3) = −9. Avec des parenthèses, (−3)^{2} = 9." },
+    { t: "v", q: "Combien vaut 2 + 3 × 4 ?", r: 14, p: [20, 24, 9], e: "La multiplication passe avant l’addition : 2 + 12 = 14." },
+    { t: "v", q: "Pour 2x^{2} − 3x − 2, calcule Δ = b^{2} − 4ac.", r: 25, p: [-7, 7, 1], e: "a = 2, b = −3, c = −2 : Δ = (−3)^{2} − 4 × 2 × (−2) = 9 + 16 = 25. Piège : −4 × 2 × (−2) = +16." },
+    { t: "c", q: "@frac{2}{3} + @frac{1}{4} = …", r: "@frac{11}{12}", p: ["@frac{3}{7}", "@frac{3}{12}", "@frac{2}{12}"], e: "Même dénominateur d’abord : @frac{8}{12} + @frac{3}{12} = @frac{11}{12}. On n’additionne jamais les dénominateurs." },
+    { t: "c", q: "@frac{3}{4} × @frac{8}{9} = …", r: "@frac{2}{3}", p: ["@frac{11}{13}", "@frac{27}{32}", "@frac{24}{9}"], e: "Haut × haut et bas × bas : @frac{24}{36}, puis on simplifie par 12 : @frac{2}{3}." },
+    { t: "c", q: "@frac{5}{6} ÷ @frac{10}{3} = …", r: "@frac{1}{4}", p: ["@frac{25}{9}", "4", "@frac{1}{2}"], e: "Diviser, c’est multiplier par l’inverse : @frac{5}{6} × @frac{3}{10} = @frac{15}{60} = @frac{1}{4}." },
+    { t: "c", q: "@sqrt{48} = …", r: "4@sqrt{3}", p: ["16@sqrt{3}", "3@sqrt{4}", "24"], e: "48 = 16 × 3, donc @sqrt{48} = @sqrt{16} × @sqrt{3} = 4@sqrt{3}." },
+    { t: "c", q: "@sqrt{9 + 16} = …", r: "5", p: ["7", "25", "12,5"], e: "@sqrt{25} = 5. Piège : @sqrt{9} + @sqrt{16} = 7, ce n’est pas la même chose." },
+    { t: "c", q: "Développe (x + 3)^{2}.", r: "x^{2} + 6x + 9", p: ["x^{2} + 9", "x^{2} + 3x + 9", "x^{2} + 6x + 6"], e: "(a + b)^{2} = a^{2} + 2ab + b^{2} : le double produit vaut 2 × x × 3 = 6x." },
+    { t: "c", q: "Développe (2x − 1)(x + 4).", r: "2x^{2} + 7x − 4", p: ["2x^{2} − 4", "2x^{2} + 9x − 4", "2x^{2} + 7x + 4"], e: "2x × x + 2x × 4 − 1 × x − 1 × 4 = 2x^{2} + 8x − x − 4 = 2x^{2} + 7x − 4." },
+    { t: "c", q: "Factorise x^{2} − 16.", r: "(x − 4)(x + 4)", p: ["(x − 4)^{2}", "(x − 8)(x + 8)", "x(x − 16)"], e: "x^{2} − 16 = x^{2} − 4^{2} = (x − 4)(x + 4), avec a^{2} − b^{2} = (a − b)(a + b)." },
+    { t: "c", q: "Factorise 6x^{2} + 9x.", r: "3x(2x + 3)", p: ["3x(2x + 9)", "6x(x + 9)", "3(2x^{2} + 3)"], e: "Le facteur commun est 3x : 6x^{2} = 3x × 2x et 9x = 3x × 3. Vérifie en redéveloppant." },
+    { t: "v", q: "Résous 3(x − 2) = x + 4. x = ?", r: 5, p: [3, 10, -5], e: "3x − 6 = x + 4 ⇔ 2x = 10 ⇔ x = 5. Piège : 3(x − 2) = 3x − 6, pas 3x − 2." },
+    { t: "v", q: "Résous 5x − 7 = 8. x = ?", r: 3, p: [-3, 15, 0.2], e: "5x = 8 + 7 = 15, donc x = @frac{15}{5} = 3. Vérification : 5 × 3 − 7 = 8 ✔." },
+    { t: "c", q: "Les solutions de (x − 2)(3x + 1) = 0 sont…", r: "x = 2 ou x = −@frac{1}{3}", p: ["x = −2 ou x = @frac{1}{3}", "x = 2 ou x = −3", "x = 2 seulement"], e: "Produit nul : x − 2 = 0 ou 3x + 1 = 0, donc x = 2 ou x = −@frac{1}{3}." },
+    { t: "v", q: "Combien vaut @frac{5 × 4 × 3}{3 × 2 × 1} ?", r: 10, p: [20, 60, 30], e: "Simplifie avant de calculer : les 3 s’en vont, puis @frac{5 × 4}{2} = 10. C’est @C{5}{3}, qui sert en dénombrement." }
+  ],
   "ma-ortho": [
     { t: "c", q: "Deux droites orthogonales de l’espace…", r: "ne se coupent pas forcément", p: ["se coupent toujours", "sont toujours parallèles", "sont forcément dans un même plan"], e: "Orthogonales = à angle droit, même sans se toucher. Si elles se coupent en plus, elles sont perpendiculaires." },
     { t: "c", q: "Pour prouver que (d) est orthogonale au plan (P), il suffit que (d) soit orthogonale à…", r: "deux droites sécantes de (P)", p: ["une droite de (P)", "deux droites parallèles de (P)", "trois points de (P)"], e: "Le théorème demande deux droites **sécantes**. Deux droites parallèles ne suffisent pas." },
@@ -305,6 +372,67 @@ Object.assign(QUIZ, {
 });
 
 Object.assign(EXOS, {
+  "ma-bases": [
+    { id: "ma-b1", titre: "Calculer sans calculatrice", niveau: 1, duree: 15,
+      contexte: "Calcule chaque expression et donne le résultat le plus simple possible, sans calculatrice :\nA = (−2)^{3} + 3 × (−4)\nB = @frac{2}{3} − @frac{5}{6}\nC = @frac{3}{5} ÷ @frac{9}{10}\nD = @sqrt{75} − @sqrt{12}",
+      questions: [
+        { q: "1. Calcule A.", indice: "(−2)^{3} = (−2) × (−2) × (−2). Fais d’abord la puissance et le produit, puis l’addition.",
+          corrige: "(−2)^{3} = −8 (puissance impaire d’un négatif : résultat négatif) et 3 × (−4) = −12.\nA = −8 + (−12) = **−20**.", type: "calcul" },
+        { q: "2. Calcule B.", indice: "Mets les deux fractions sur 6.",
+          corrige: "@frac{2}{3} = @frac{4}{6}, donc B = @frac{4}{6} − @frac{5}{6} = **−@frac{1}{6}**.", type: "calcul" },
+        { q: "3. Calcule C et simplifie.", indice: "Diviser par @frac{9}{10}, c’est multiplier par @frac{10}{9}.",
+          corrige: "C = @frac{3}{5} × @frac{10}{9} = @frac{30}{45} = **@frac{2}{3}** (on divise le haut et le bas par 15).", type: "calcul" },
+        { q: "4. Écris D sous la forme a@sqrt{3}.", indice: "75 = 25 × 3 et 12 = 4 × 3.",
+          corrige: "@sqrt{75} = @sqrt{25 × 3} = 5@sqrt{3} et @sqrt{12} = @sqrt{4 × 3} = 2@sqrt{3}.\nD = 5@sqrt{3} − 2@sqrt{3} = **3@sqrt{3}**.",
+          retenir: "Pour simplifier une racine, cherche le plus grand carré qui divise le nombre : 4, 9, 16, 25, 36, 49…" }
+      ] },
+    { id: "ma-b2", titre: "Développer et réduire", niveau: 1, duree: 15,
+      contexte: "Développe et réduis chaque expression :\nE = (x + 5)^{2}\nF = (3x − 2)^{2}\nG = (2x + 7)(2x − 7)\nH = (x − 1)(2x + 3) − 2(x^{2} − 4)",
+      questions: [
+        { q: "1. Développe E et F avec les identités remarquables.", indice: "(a + b)^{2} = a^{2} + 2ab + b^{2} et (a − b)^{2} = a^{2} − 2ab + b^{2} : n’oublie pas le double produit.",
+          corrige: "E = x^{2} + 2 × x × 5 + 5^{2} = **x^{2} + 10x + 25**.\nF = (3x)^{2} − 2 × 3x × 2 + 2^{2} = **9x^{2} − 12x + 4**.", type: "calcul",
+          retenir: "(3x)^{2} = 9x^{2} : le carré porte sur le 3 et sur le x." },
+        { q: "2. Développe G.", indice: "C’est (a + b)(a − b) avec a = 2x et b = 7.",
+          corrige: "G = (2x)^{2} − 7^{2} = **4x^{2} − 49**." },
+        { q: "3. Développe et réduis H.", indice: "Développe chaque morceau à part. Attention au signe moins devant 2(x^{2} − 4).",
+          corrige: "(x − 1)(2x + 3) = 2x^{2} + 3x − 2x − 3 = 2x^{2} + x − 3.\n−2(x^{2} − 4) = −2x^{2} + 8.\nH = 2x^{2} + x − 3 − 2x^{2} + 8 = **x + 5**.", type: "calcul" }
+      ] },
+    { id: "ma-b3", titre: "Factoriser pour résoudre", niveau: 2, duree: 20,
+      contexte: "On donne les expressions :\nA(x) = x^{2} − 9\nB(x) = (2x + 1)(x − 4) + (2x + 1)(3x + 2)\nC(x) = x^{2} − 10x + 25",
+      questions: [
+        { q: "1. Factorise A(x), puis résous A(x) = 0.", indice: "x^{2} − 9 = x^{2} − 3^{2} : c’est a^{2} − b^{2}.",
+          corrige: "A(x) = (x − 3)(x + 3).\nA(x) = 0 ⇔ x − 3 = 0 ou x + 3 = 0 ⇔ **x = 3 ou x = −3**." },
+        { q: "2. Factorise B(x), puis résous B(x) = 0.", indice: "(2x + 1) est un facteur commun aux deux termes.",
+          corrige: "B(x) = (2x + 1)[(x − 4) + (3x + 2)] = (2x + 1)(4x − 2).\nB(x) = 0 ⇔ 2x + 1 = 0 ou 4x − 2 = 0 ⇔ **x = −@frac{1}{2} ou x = @frac{1}{2}**.", type: "calcul" },
+        { q: "3. Factorise C(x), puis résous C(x) = 0.", indice: "x^{2} − 10x + 25 = x^{2} − 2 × x × 5 + 5^{2}.",
+          corrige: "C(x) = (x − 5)^{2}.\nC(x) = 0 ⇔ x − 5 = 0 ⇔ **x = 5** (une seule solution).",
+          retenir: "Pour résoudre une équation du 2nd degré sans discriminant : factorise, puis utilise le produit nul." }
+      ] },
+    { id: "ma-b4", titre: "Les pagnes de la fête de fin d’année", niveau: 2, duree: 20,
+      contexte: "Pour la fête de fin d’année, la classe de 1ère D commande des pagnes. Le vendeur Koffi demande 3 500 F par pagne, plus 1 500 F de livraison. La trésorière de la classe dispose de 64 500 F.\nTâche : aider la classe à choisir sa commande.",
+      questions: [
+        { q: "1. Exprime le prix P(n) à payer chez Koffi pour n pagnes, livraison comprise.",
+          corrige: "Chaque pagne coûte 3 500 F, et la livraison 1 500 F une seule fois : **P(n) = 3 500n + 1 500**." },
+        { q: "2. Combien de pagnes la classe peut-elle acheter avec exactement 64 500 F ?", indice: "Résous l’équation 3 500n + 1 500 = 64 500.",
+          corrige: "3 500n + 1 500 = 64 500 ⇔ 3 500n = 63 000 ⇔ n = @frac{63 000}{3 500} = **18**.\nLa classe peut acheter 18 pagnes.", type: "calcul" },
+        { q: "3. Une autre vendeuse, Afiavi, vend le pagne 3 800 F, livraison gratuite. Pour combien de pagnes les deux vendeurs coûtent-ils le même prix ?", indice: "Chez Afiavi, n pagnes coûtent 3 800n. Résous 3 500n + 1 500 = 3 800n.",
+          corrige: "3 500n + 1 500 = 3 800n ⇔ 1 500 = 300n ⇔ **n = 5**.\nPour 5 pagnes, les deux coûtent 19 000 F." },
+        { q: "4. Pour 18 pagnes, quel vendeur est le moins cher, et de combien ?",
+          corrige: "Chez Koffi : P(18) = 64 500 F. Chez Afiavi : 3 800 × 18 = 68 400 F.\n**Koffi est moins cher, de 3 900 F.**",
+          retenir: "Termine toujours par une phrase qui répond à la question, avec l’unité (ici F)." }
+      ] },
+    { id: "ma-b5", titre: "Équations avec des fractions et des parenthèses", niveau: 2, duree: 15,
+      contexte: "Résous dans ℝ les équations suivantes :\n(E1)  @frac{x}{2} + @frac{x}{3} = 10\n(E2)  @frac{2x − 1}{3} = @frac{x + 2}{2}\n(E3)  5 − 2(x − 3) = 3x − 4",
+      questions: [
+        { q: "1. Résous (E1).", indice: "Multiplie les deux membres par 6 pour enlever les dénominateurs.",
+          corrige: "On multiplie par 6 : 3x + 2x = 60 ⇔ 5x = 60 ⇔ **x = 12**.\nVérification : @frac{12}{2} + @frac{12}{3} = 6 + 4 = 10 ✔.", type: "calcul" },
+        { q: "2. Résous (E2).", indice: "Produit en croix : 2(2x − 1) = 3(x + 2).",
+          corrige: "2(2x − 1) = 3(x + 2) ⇔ 4x − 2 = 3x + 6 ⇔ **x = 8**.\nVérification : @frac{16 − 1}{3} = 5 et @frac{8 + 2}{2} = 5 ✔.", type: "calcul" },
+        { q: "3. Résous (E3).", indice: "Attention au signe moins devant 2(x − 3) : −2(x − 3) = −2x + 6.",
+          corrige: "5 − 2x + 6 = 3x − 4 ⇔ 11 − 2x = 3x − 4 ⇔ 15 = 5x ⇔ **x = 3**.\nVérification : 5 − 2(3 − 3) = 5 et 3 × 3 − 4 = 5 ✔.", type: "calcul",
+          retenir: "Un moins devant une parenthèse change tous les signes à l’intérieur." }
+      ] }
+  ],
   "ma-ortho": [
     { id: "ma-o1", titre: "Les cages de l’atelier de Jacob", niveau: 2, duree: 25,
       contexte: "Jacob, soudeur à Cotonou, fabrique des cages en forme de cube ABCDEFGH pour des pigeons. Son fils veut comprendre les propriétés de ces cages.\nABCD est la face du dessous, EFGH celle du dessus (E au-dessus de A, F de B, G de C, H de D). On note O le centre du carré ABCD.\n@fig{cube}",

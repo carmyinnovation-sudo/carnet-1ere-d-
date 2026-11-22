@@ -1,7 +1,7 @@
 /* Carnet de révisions 1ère D : met l'appli en cache pour qu'elle s'ouvre même sans internet.
    Les données (Supabase) ne passent jamais par ce cache.
    Le carnet de bac vit sur le même site : on ne touche qu'aux caches qui commencent par « c1d- ». */
-const CACHE = "c1d-v1";
+const CACHE = "c1d-v2";
 const FICHIERS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./apple-touch-icon.png", "./favicon.png"];
 self.addEventListener("install", (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(FICHIERS)).then(() => self.skipWaiting()));
