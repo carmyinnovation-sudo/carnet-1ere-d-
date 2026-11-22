@@ -2907,6 +2907,9 @@ function fusionConfig(d) {
   const r = Object.assign({}, DEFAUTS.rythme, (d && d.rythme) || {});
   c.rythme = { mode: [1, 2, 3, 4].includes(r.mode) ? r.mode : 3, debut: /^\d{4}-\d{2}-\d{2}$/.test(r.debut || "") ? r.debut : null };
   if (!/^(19|2[0-3]):[0-5]\d$/.test(c.coucher || "")) c.coucher = DEFAUTS.coucher;
+  // Un prénom vide (cache local d'une version d'avant le 22 novembre) ne doit pas effacer « Mawouena »
+  if (!String(c.prenom || "").trim()) c.prenom = DEFAUTS.prenom;
+  if (!String(c.coach || "").trim()) c.coach = DEFAUTS.coach;
   return c;
 }
 const majConfig = (changes) => Store.ecrire("app", "config", Object.assign({}, S.config, changes));
