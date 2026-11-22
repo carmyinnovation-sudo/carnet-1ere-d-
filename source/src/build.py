@@ -70,9 +70,9 @@ rep("--s-ses: #3987e5; --s-hggsp: #d95926; --s-philo: #199e70;",
 rep("\n</style>", lire("parts/extra.css") + "\n</style>")
 
 # ---------- Contenu : les fichiers de src/data, dans l'ordre ----------
-# PCT en attente : Will envoie la photo du cahier de PCT de Mawouena ; d'ici là, aucun chapitre de PCT
-# (la matière reste dans la liste pour les notes et la date du devoir).
-EN_ATTENTE = {"30-pct.js"}
+# Fichiers mis de côté (par exemple une matière dont on attend le cahier) : rien en attente aujourd'hui.
+# La PCT est revenue le 22 novembre, d'après la page des situations d'apprentissage de son cahier.
+EN_ATTENTE = set()
 fichiers = [f for f in sorted(glob.glob(os.path.join(ICI, "data", "*.js"))) if os.path.basename(f) not in EN_ATTENTE]
 donnees = "\n".join(open(f, encoding="utf-8").read() for f in fichiers)
 print("Contenu :", ", ".join(os.path.basename(f) for f in fichiers), "· en attente :", ", ".join(sorted(EN_ATTENTE)) or "rien")

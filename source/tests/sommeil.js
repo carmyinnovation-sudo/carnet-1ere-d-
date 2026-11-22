@@ -122,18 +122,24 @@ const texteCarte = (p) => p.locator("section[aria-labelledby=titre-plan]").inner
     ok("Coucher 22 h, il est 21 h : 1 bloc (fin 21 h 25)", /1 bloc au lieu de 3/.test(t), t.slice(0, 300));
     await ctx.close(); }
 
-  // 8. PCT mise de côté
+  // 8. PCT revenue d’après le cahier (SA1, SA2), maths « Les bases » en tête
   { const { p, ctx } = await page(browser, "18:00");
     await p.goto(URL + "#reviser"); await p.clock.runFor(1200);
+    await p.locator(".rangee button, .filtres button, button", { hasText: /^Physique, chimie et technologie$|^PCT$/ }).first().click().catch(() => {});
+    await p.clock.runFor(300);
     const rv = await p.locator("main").innerText();
-    ok("Réviser : aucune PCT", !/PCT|Physique/.test(rv));
+    ok("Réviser : la PCT est là, avec SA1 et SA2 du cahier", /L’énergie mécanique au service du développement/i.test(rv) && /Étude de quelques composés organiques/i.test(rv), rv.slice(0, 400));
     await p.goto(URL + "#plus"); await p.clock.runFor(1200);
     const pl = await p.locator("main").innerText();
-    ok("Plus : la PCT reste dans Mes matières, « en préparation »", /Physique, chimie et technologie\s+Chapitres en préparation/.test(pl));
+    ok("Plus : la PCT n’est plus « en préparation »", /Physique, chimie et technologie\s+\d+ chapitres au devoir/.test(pl) && !/en préparation/.test(pl));
     ok("Plus : « Les bases en maths » et « Le sommeil d’abord » expliqués", /Le sommeil d’abord/.test(pl) && /Les bases en maths/.test(pl));
     await p.goto(URL + "#reviser"); await p.clock.runFor(1200);
+    await p.locator(".choix button", { hasText: /^Tout$/ }).first().click(); await p.clock.runFor(300);
     const lb = await p.locator(".liste-chap button.chap").first().innerText();
     ok("Réviser : « Les bases du calcul » en tête des maths", /Les bases du calcul/.test(lb) && /Sert dans tous les exercices/.test(lb), lb);
+    await p.evaluate(() => window.__carnet.ouvrirChapitre("pct-ec")); await p.clock.runFor(300);
+    const ch = await p.locator(".voile").last().innerText();
+    ok("Chapitre PCT : message « thème dans ton cahier, leçon à confirmer »", /Ce thème est bien dans ton cahier/.test(ch) && /Pas encore vu en classe/.test(ch), ch.slice(0, 400));
     await ctx.close(); }
 
   await browser.close();

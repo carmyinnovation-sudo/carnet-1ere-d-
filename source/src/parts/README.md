@@ -12,4 +12,4 @@ Web app de révision pour une élève de Première D (programme du Bénin), à i
 - Les données sont stockées dans Supabase. Elles ne sont lisibles qu'avec la clé secrète contenue dans le lien personnel du carnet (`?k=…`), qui n'est pas dans ce dépôt.
 - La clé Supabase présente dans le code est la clé publique du projet : elle ne donne accès à rien sans cette clé secrète.
 
-Programme : chapitres relevés dans les cahiers de l'élève (2e devoir du 1er trimestre, lundi 30 novembre 2026), plus un chapitre de maths « Les bases du calcul » proposé en premier. La PCT est en attente du relevé de son cahier : la matière existe pour les notes et la date du devoir, sans chapitres pour l'instant.
+Programme : chapitres relevés dans les cahiers de l'élève (2e devoir du 1er trimestre, lundi 30 novembre 2026), plus un chapitre de maths « Les bases du calcul » proposé en premier. Pour la PCT, les deux situations d'apprentissage du 1er trimestre relevées dans son cahier (l'énergie mécanique, les composés organiques) ; les leçons sont à confirmer par l'élève (case « Pas encore vu en classe »).

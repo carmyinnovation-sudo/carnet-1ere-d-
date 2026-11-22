@@ -332,7 +332,7 @@ function ouvrirChapitre(id) {
         h("div", { class: "puces" }, puceMatiere(c.mat), c.devoir ? h("span", { class: "puce devoir" }, "Au programme du devoir") : c.socle ? h("span", { class: "puce devoir" }, "Les bases : servent dans tout le devoir") : h("span", { class: "puce hors" }, "Rappel, hors devoir"),
           c.verifier ? h("span", { class: "puce verif" }, "À vérifier avec ton cahier") : null),
         h("h3", { style: "font-size:var(--t-l)" }, c.titre),
-        c.verifier ? bandeau("alerte", "Ce chapitre vient du programme officiel de PCT de 1ère D. Vérifie dans ton cahier que ton professeur l’a déjà fait. Sinon, coche « Pas encore vu en classe » : le carnet ne te le proposera plus le soir.") : null,
+        c.verifier ? bandeau("alerte", "Ce thème est bien dans ton cahier (programme de 1ère D), mais on n’a pas encore la liste des leçons de ce devoir. Si ton professeur n’a pas encore fait cette leçon, coche « Pas encore vu en classe » : le carnet ne te la proposera plus le soir.") : null,
         h("label", { class: "case" }, h("input", { type: "checkbox", checked: !vu, onchange: (e) => { ecrireChapitre(id, { pasVu: e.target.checked }); setTimeout(dessiner, 0); } }),
           h("span", null, h("b", null, "Pas encore vu en classe"), h("span", { class: "petit", style: "display:block" }, "Coche si ton professeur n’a pas encore fait ce chapitre."))),
         h("div", null, h("label", { class: "champ" }, "Où tu en es sur ce chapitre"),

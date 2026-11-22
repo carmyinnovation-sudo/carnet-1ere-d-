@@ -1,7 +1,10 @@
 /* ---------------- PCT · 1ère D ----------------
-   Pas de photo du cahier de PCT : chapitres du début du programme officiel de 1ère D
-   (SA 1 « L’énergie mécanique au service du développement », SA 2 « Étude de quelques composés organiques »).
-   Tous marqués « à vérifier » : l’élève décoche ce que son professeur n’a pas encore fait. */
+   Relevé du cahier (page « Titres des situations d’apprentissage du programme en classe de 1ère D ») :
+   SA1 L’énergie mécanique au service du développement · SA2 Étude de quelques composés organiques
+   et leurs propriétés · SA3 source de tension continue stabilisée · SA4 oxydoréduction ·
+   SA5 température et chaleur · SA6 vibration, propagation, interférences.
+   Au 2e devoir du 1er trimestre : SA1 et SA2. On n’a pas la liste des leçons déjà faites :
+   chaque chapitre reste « à vérifier » et l’élève coche « Pas encore vu en classe » si besoin. */
 METHODES.push(
   { id: "m-pct-devoir", mat: "pct", titre: "PCT : réussir le devoir",
     intro: "Le devoir de PCT dure souvent 3 heures et compte deux situations d’évaluation : **A. Chimie et technologie** et **B. Physique et technologie**. Chacune a un contexte, des documents (données) et une tâche en trois parties : 1. mobilisation des ressources (questions de cours), 2 et 3. résolution de problème.",
@@ -17,7 +20,7 @@ METHODES.push(
 );
 
 CHAPITRES.push(
-  { id: "pct-cine", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: false, verifier: true, court: "Rappel : mouvement et principe d’inertie",
+  { id: "pct-cine", mat: "pct", groupe: "SA1 · L’énergie mécanique au service du développement", devoir: false, verifier: true, court: "Rappel : mouvement et principe d’inertie",
     titre: "Rappel : mouvement d’un solide, vitesse, principe d’inertie",
     fiche: [
       "**Référentiel** : l’objet par rapport auquel on étudie le mouvement (le sol : référentiel terrestre).",
@@ -36,7 +39,7 @@ CHAPITRES.push(
       ["Trajectoire d’un objet lancé horizontalement", "Une parabole : x = v_{0}t, y = −½gt², donc y = −@frac{g}{2v_{0}²}x²."]
     ],
     sujets: [] },
-  { id: "pct-trav", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Travail et puissance d’une force",
+  { id: "pct-trav", mat: "pct", groupe: "SA1 · L’énergie mécanique au service du développement", devoir: true, verifier: true, court: "Travail et puissance d’une force",
     titre: "Travail et puissance d’une force",
     fiche: [
       "**Travail d’une force constante** @vec{F} sur un déplacement rectiligne AB : **W_{AB}(@vec{F}) = F × AB × cos α**, où α est l’angle entre @vec{F} et le déplacement. Unité : le **joule (J)**.",
@@ -62,7 +65,7 @@ CHAPITRES.push(
       ["Travail d’un couple de moment C", "W = C × θ, avec θ l’angle de rotation en radians."]
     ],
     sujets: [] },
-  { id: "pct-ec", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Énergie cinétique et théorème",
+  { id: "pct-ec", mat: "pct", groupe: "SA1 · L’énergie mécanique au service du développement", devoir: true, verifier: true, court: "Énergie cinétique et théorème",
     titre: "Énergie cinétique et théorème de l’énergie cinétique",
     fiche: [
       "**Énergie cinétique** d’un solide en translation : **E_{c} = ½ m v²** (m en kg, v en m/s, E_{c} en J). Si la vitesse double, l’énergie cinétique est multipliée par 4.",
@@ -82,7 +85,7 @@ CHAPITRES.push(
       ["Calculer une force de frottement avec le théorème", "W(f) = ΔE_{c} − (somme des autres travaux), puis f = −W(f) / L."]
     ],
     sujets: [] },
-  { id: "pct-em", mat: "pct", groupe: "SA1 · L’énergie mécanique (physique)", devoir: true, verifier: true, court: "Énergie potentielle et énergie mécanique",
+  { id: "pct-em", mat: "pct", groupe: "SA1 · L’énergie mécanique au service du développement", devoir: true, verifier: true, court: "Énergie potentielle et énergie mécanique",
     titre: "Énergie potentielle de pesanteur et énergie mécanique",
     fiche: [
       "**Énergie potentielle de pesanteur** : **E_{pp} = m g z** (+ une constante), avec z l’altitude comptée à partir d’un niveau de référence choisi (E_{pp} = 0 à ce niveau). L’axe des z est orienté vers le haut.",
@@ -101,7 +104,7 @@ CHAPITRES.push(
       ["Hauteur maximale d’un objet lancé vers le haut (sans frottements)", "Au sommet, v = 0 : toute l’énergie mécanique est de l’énergie potentielle, donc z_{max} = @frac{E_{m}}{mg}."]
     ],
     sujets: [] },
-  { id: "pct-anal", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Chimie organique : généralités et analyse",
+  { id: "pct-anal", mat: "pct", groupe: "SA2 · Étude de quelques composés organiques et leurs propriétés", devoir: true, verifier: true, court: "Chimie organique : généralités et analyse",
     titre: "Généralités sur la chimie organique et analyse élémentaire",
     fiche: [
       "**Composé organique** : composé du carbone, contenant presque toujours de l’hydrogène (souvent aussi O et N). Exceptions minérales : CO, CO₂, les carbonates, les cyanures.",
@@ -128,7 +131,7 @@ CHAPITRES.push(
       ["Isomères", "Composés de même formule brute mais de formules développées différentes."]
     ],
     sujets: [] },
-  { id: "pct-alcanes", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Les alcanes",
+  { id: "pct-alcanes", mat: "pct", groupe: "SA2 · Étude de quelques composés organiques et leurs propriétés", devoir: true, verifier: true, court: "Les alcanes",
     titre: "Les alcanes : formule, nomenclature, isomérie, réactions",
     fiche: [
       "**Alcanes** : hydrocarbures **saturés** (uniquement des liaisons simples), de formule générale **C_{n}H_{2n+2}**. Masse molaire : M = 14n + 2 (g/mol).",
@@ -153,7 +156,7 @@ CHAPITRES.push(
       ["Réaction de substitution", "Un atome d’hydrogène est remplacé par un autre atome : CH₄ + Cl₂ → CH₃Cl + HCl (à la lumière)."]
     ],
     sujets: [] },
-  { id: "pct-alcenes", mat: "pct", groupe: "SA2 · Composés organiques (chimie)", devoir: true, verifier: true, court: "Alcènes et alcynes",
+  { id: "pct-alcenes", mat: "pct", groupe: "SA2 · Étude de quelques composés organiques et leurs propriétés", devoir: true, verifier: true, court: "Alcènes et alcynes",
     titre: "Les alcènes et les alcynes : nomenclature, addition, polymérisation",
     fiche: [
       "**Alcènes** : une double liaison C=C, formule **C_{n}H_{2n}**. Le plus simple : l’éthylène (éthène) C₂H₄, molécule plane.",

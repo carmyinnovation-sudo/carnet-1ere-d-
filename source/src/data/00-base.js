@@ -2,8 +2,8 @@
    CONTENU — Première D, programme du Bénin (2026-2027)
    Chapitres relevés dans les cahiers de l’élève pour le
    2e devoir du 1er trimestre (lundi 30 novembre 2026).
-   PCT : en attente de la photo du cahier (30-pct.js n’est pas inclus
-   dans la construction tant que le vrai programme n’est pas relevé).
+   PCT : SA1 et SA2 d’après la page des situations d’apprentissage du cahier
+   (leçons du devoir à confirmer : l’élève coche « Pas encore vu en classe »).
    ============================================================ */
 const NIVEAU_IA = "en classe de Première D au Bénin (programme officiel béninois, approche par compétences)";
 const MATIERES = {
