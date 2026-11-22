@@ -23,7 +23,7 @@ function rendre() {
   let nav = app.querySelector(".nav");
   if (!nav) {
     nav = h("nav", { class: "nav", "aria-label": "Navigation" },
-      h("div", { class: "marque" }, "Carnet de révisions", h("small", null, "1ère D · 2026-2027")),
+      h("div", { class: "marque" }, "Carnet de Mawouena", h("small", null, "1ère D · Bénin · 2026-2027")),
       ONGLETS.map((o) => h("a", { href: "#" + o.id, "data-o": o.id }, icone(o.icone), h("span", null, o.nom))));
     app.append(h("div", { class: "marge-rouge", "aria-hidden": "true" }), nav, h("main", { class: "main", id: "vue" }));
   }
@@ -46,7 +46,7 @@ function bandeauxEtat() {
 //@@COPIE function etatSync() {@@function ecranSansCle() {
 function ecranSansCle() {
   let saisie = "";
-  return [h("div", { class: "page-titre" }, h("h1", null, "Carnet de révisions"), h("p", null, "Ce carnet s’ouvre avec un lien personnel.")),
+  return [h("div", { class: "page-titre" }, h("h1", null, "Carnet de Mawouena"), h("p", null, "Ce carnet s’ouvre avec un lien personnel.")),
     h("section", { class: "carte" },
       h("p", null, "Ouvre le lien que tu as reçu (il se termine par ", h("code", null, "?k=…"), "), ou colle-le ici :"),
       h("label", { class: "champ" }, "Ton lien", h("input", { type: "text", id: "lien-k", placeholder: "https://…/carnet-1ere-d/?k=…", oninput: (e) => { saisie = e.target.value; } })),

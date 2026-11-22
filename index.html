@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Carnet de révisions · 1ère D</title>
+<title>Carnet de Mawouena · 1ère D</title>
 <meta name="description" content="Révisions du soir, exercices corrigés, cartes mémoire et suivi de progression pour la 1ère D.">
 <meta name="theme-color" content="#5b3fd0">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-title" content="Carnet 1ère D">
+<meta name="apple-mobile-web-app-title" content="Mawouena">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="robots" content="noindex, nofollow">
 <link rel="manifest" href="manifest.webmanifest">
@@ -22,13 +22,13 @@
 
 /* Direction : une copie double — grands carreaux Seyès en fond, marge rouge, compte à rebours écrit au stylo bleu. */
 :root {
-  --papier: #f6f8fc;
+  --papier: #f6f3fd;
   --feuille: #ffffff;
   --encre: #18233f;
   --encre-2: #4c5875;
   --encre-3: #66718c;
-  --ligne: #e4eaf5;
-  --ligne-forte: #cfd9ec;
+  --ligne: #e9e3f7;
+  --ligne-forte: #d6cbef;
   --marge: #ee95a4;
   --bic: #5b3fd0;
   --sur-bic: #ffffff;
@@ -46,7 +46,7 @@
   --barre: #2a78d6; --barre-part: #86b6ef;
   --tk1: #ec9979; --tk2: #db754b; --tk3: #c5521c; --tk4: #a43700; --tk5: #7d2600;
   --st-bon: #0ca30c; --st-moyen: #fab219; --st-faible: #d03b3b; --st-aucun: #c3cad8;
-  --grille: #e6eaf2; --axe: #c6cddb;
+  --grille: #ebe6f6; --axe: #cbc2e0;
 
   --f-display: "Kalam", "Segoe Print", "Bradley Hand", cursive;
   --f-body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
@@ -56,28 +56,28 @@
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --papier: #0c1220; --feuille: #141d31; --encre: #e6ecf8; --encre-2: #b5bfd5; --encre-3: #929db6;
-    --ligne: #172036; --ligne-forte: #26324d; --marge: #6e2f3d;
-    --bic: #a593ff; --sur-bic: #0c1220; --bic-doux: #221c45;
+    --papier: #110d1f; --feuille: #1b1631; --encre: #ece8f8; --encre-2: #b5bfd5; --encre-3: #929db6;
+    --ligne: #221b3b; --ligne-forte: #332a55; --marge: #6e2f3d;
+    --bic: #a593ff; --sur-bic: #110d1f; --bic-doux: #2a2150;
     --rouge: #ff7a88; --rouge-doux: #3a1a24; --vert: #4cc38a; --vert-doux: #14301f; --orange: #f0a040; --orange-doux: #35270f;
     --ombre: 0 1px 0 rgba(0,0,0,.3), 0 12px 30px -18px rgba(0,0,0,.8);
     --s-maths: #3987e5; --s-pct: #d95926; --s-svt: #199e70; --s-francais: #c98500; --s-anglais: #d55181; --s-hg: #0ca30c; --s-philo: #e66767;
     --barre: #5598e7; --barre-part: #1f5cab;
     --tk1: #824121; --tk2: #ae5528; --tk3: #d86d38; --tk4: #f19266; --tk5: #ffbc9d;
-    --st-aucun: #3a4560; --grille: #1f2940; --axe: #334061;
+    --st-aucun: #3f3760; --grille: #272043; --axe: #3c3364;
     color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --papier: #0c1220; --feuille: #141d31; --encre: #e6ecf8; --encre-2: #b5bfd5; --encre-3: #929db6;
-  --ligne: #172036; --ligne-forte: #26324d; --marge: #6e2f3d;
-  --bic: #a593ff; --sur-bic: #0c1220; --bic-doux: #221c45;
+  --papier: #110d1f; --feuille: #1b1631; --encre: #ece8f8; --encre-2: #b5bfd5; --encre-3: #929db6;
+  --ligne: #221b3b; --ligne-forte: #332a55; --marge: #6e2f3d;
+  --bic: #a593ff; --sur-bic: #110d1f; --bic-doux: #2a2150;
   --rouge: #ff7a88; --rouge-doux: #3a1a24; --vert: #4cc38a; --vert-doux: #14301f; --orange: #f0a040; --orange-doux: #35270f;
   --ombre: 0 1px 0 rgba(0,0,0,.3), 0 12px 30px -18px rgba(0,0,0,.8);
   --s-maths: #3987e5; --s-pct: #d95926; --s-svt: #199e70; --s-francais: #c98500; --s-anglais: #d55181; --s-hg: #0ca30c; --s-philo: #e66767;
   --barre: #5598e7; --barre-part: #1f5cab;
   --tk1: #824121; --tk2: #ae5528; --tk3: #d86d38; --tk4: #f19266; --tk5: #ffbc9d;
-  --st-aucun: #3a4560; --grille: #1f2940; --axe: #334061;
+  --st-aucun: #3f3760; --grille: #272043; --axe: #3c3364;
   color-scheme: dark;
 }
 
@@ -4579,7 +4579,7 @@ function rendre() {
   let nav = app.querySelector(".nav");
   if (!nav) {
     nav = h("nav", { class: "nav", "aria-label": "Navigation" },
-      h("div", { class: "marque" }, "Carnet de révisions", h("small", null, "1ère D · 2026-2027")),
+      h("div", { class: "marque" }, "Carnet de Mawouena", h("small", null, "1ère D · Bénin · 2026-2027")),
       ONGLETS.map((o) => h("a", { href: "#" + o.id, "data-o": o.id }, icone(o.icone), h("span", null, o.nom))));
     app.append(h("div", { class: "marge-rouge", "aria-hidden": "true" }), nav, h("main", { class: "main", id: "vue" }));
   }
@@ -4606,7 +4606,7 @@ function etatSync() {
 }
 function ecranSansCle() {
   let saisie = "";
-  return [h("div", { class: "page-titre" }, h("h1", null, "Carnet de révisions"), h("p", null, "Ce carnet s’ouvre avec un lien personnel.")),
+  return [h("div", { class: "page-titre" }, h("h1", null, "Carnet de Mawouena"), h("p", null, "Ce carnet s’ouvre avec un lien personnel.")),
     h("section", { class: "carte" },
       h("p", null, "Ouvre le lien que tu as reçu (il se termine par ", h("code", null, "?k=…"), "), ou colle-le ici :"),
       h("label", { class: "champ" }, "Ton lien", h("input", { type: "text", id: "lien-k", placeholder: "https://…/carnet-1ere-d/?k=…", oninput: (e) => { saisie = e.target.value; } })),

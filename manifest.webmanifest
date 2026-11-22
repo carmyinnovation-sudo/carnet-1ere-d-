@@ -1,6 +1,6 @@
 {
-  "name": "Carnet de révisions · 1ère D",
-  "short_name": "Carnet 1ère D",
+  "name": "Carnet de Mawouena · 1ère D",
+  "short_name": "Mawouena",
   "description": "Révisions du soir, exercices corrigés, cartes mémoire et suivi de progression.",
   "lang": "fr",
   "dir": "ltr",
@@ -8,7 +8,7 @@
   "start_url": "./",
   "scope": "./",
   "id": "./",
-  "background_color": "#f6f8fc",
+  "background_color": "#f6f3fd",
   "theme_color": "#5b3fd0",
   "icons": [
     {

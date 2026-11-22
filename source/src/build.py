@@ -53,16 +53,23 @@ def resoudre_copies(txt):
     return "\n".join(out)
 
 # ---------- En-tête ----------
-rep("<title>Carnet de bac 2027</title>", "<title>Carnet de révisions · 1ère D</title>")
+rep("<title>Carnet de bac 2027</title>", "<title>Carnet de Mawouena · 1ère D</title>")
 rep('content="Révisions du soir, cartes mémoire, exercices type bac et suivi de progression."',
     'content="Révisions du soir, exercices corrigés, cartes mémoire et suivi de progression pour la 1ère D."')
 rep('<meta name="theme-color" content="#1f4fd8">', '<meta name="theme-color" content="#5b3fd0">')
-rep('<meta name="apple-mobile-web-app-title" content="Carnet de bac">', '<meta name="apple-mobile-web-app-title" content="Carnet 1ère D">')
+rep('<meta name="apple-mobile-web-app-title" content="Carnet de bac">', '<meta name="apple-mobile-web-app-title" content="Mawouena">')
 
 # ---------- Couleurs : encre violette, une couleur par matière ----------
 rep("  --bic: #1f4fd8;\n", "  --bic: #5b3fd0;\n")
 rep("  --bic-doux: #e9effd;\n", "  --bic-doux: #eeeafd;\n")
-rep("--bic: #7fa2ff; --sur-bic: #0c1220; --bic-doux: #1b2848;", "--bic: #a593ff; --sur-bic: #0c1220; --bic-doux: #221c45;", n=2)
+rep("--bic: #7fa2ff; --sur-bic: #0c1220; --bic-doux: #1b2848;", "--bic: #a593ff; --sur-bic: #110d1f; --bic-doux: #2a2150;", n=2)
+# Son carnet ne doit jamais ressembler à celui du frère : fond violet (pas bleu nuit), clair comme sombre
+rep("  --papier: #f6f8fc;\n", "  --papier: #f6f3fd;\n")
+rep("  --ligne: #e4eaf5;\n  --ligne-forte: #cfd9ec;\n", "  --ligne: #e9e3f7;\n  --ligne-forte: #d6cbef;\n")
+rep("  --grille: #e6eaf2; --axe: #c6cddb;\n", "  --grille: #ebe6f6; --axe: #cbc2e0;\n")
+rep("--papier: #0c1220; --feuille: #141d31; --encre: #e6ecf8;", "--papier: #110d1f; --feuille: #1b1631; --encre: #ece8f8;", n=2)
+rep("--ligne: #172036; --ligne-forte: #26324d;", "--ligne: #221b3b; --ligne-forte: #332a55;", n=2)
+rep("--st-aucun: #3a4560; --grille: #1f2940; --axe: #334061;", "--st-aucun: #3f3760; --grille: #272043; --axe: #3c3364;", n=2)
 rep("  --s-ses: #2a78d6; --s-hggsp: #eb6834; --s-philo: #1baf7a;\n",
     "  --s-maths: #2a78d6; --s-pct: #eb6834; --s-svt: #1baf7a; --s-francais: #eda100; --s-anglais: #e87ba4; --s-hg: #008300; --s-philo: #e34948;\n")
 rep("--s-ses: #3987e5; --s-hggsp: #d95926; --s-philo: #199e70;",
@@ -368,10 +375,10 @@ open(os.path.join(DIST, "index.html"), "w", encoding="utf-8").write(s)
 # ---------- Manifeste et service worker ----------
 VERSION = json.load(open(os.path.join(ICI, "version.json")))["version"]
 manifeste = {
-  "name": "Carnet de révisions · 1ère D", "short_name": "Carnet 1ère D",
+  "name": "Carnet de Mawouena · 1ère D", "short_name": "Mawouena",
   "description": "Révisions du soir, exercices corrigés, cartes mémoire et suivi de progression.",
   "lang": "fr", "dir": "ltr", "display": "standalone", "start_url": "./", "scope": "./", "id": "./",
-  "background_color": "#f6f8fc", "theme_color": "#5b3fd0",
+  "background_color": "#f6f3fd", "theme_color": "#5b3fd0",
   "icons": [
     {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
     {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
